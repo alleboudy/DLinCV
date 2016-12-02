@@ -39,7 +39,8 @@ def convert_to_TFRecord(images, poses, outputDirectory):
         img = cv2.imread(images[index])
         #img = cv2.resize(img, (224,224))    # to reproduce PoseNet results, please resize the images so that the shortest side is 256 pixels
         #img = np.transpose(img,(2,0,1))
-        image_raw = img.tostring()
+        img = ResizeCropImage(img)
+	image_raw = img.tostring()
         example = tf.train.Example(features=tf.train.Features(feature={
         'height': _int64_feature(rows),
         'width': _int64_feature(cols),
@@ -79,10 +80,9 @@ with open(directory+dataset) as f:
         p6 = float(p6)
         poses.append((p0,p1,p2,p3,p4,p5,p6))
         images.append(directory+fname)
-
+#r=list([1])
 r = list(range(len(images)))
 random.shuffle(r)
 convert_to_TFRecord(images,poses,outputDirectory)
-
 
 
