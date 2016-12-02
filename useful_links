@@ -1,0 +1,34 @@
+Result of tf.reshape() with dynamic shape does not work with tf.train.shuffle_batch() #2604
+https://github.com/tensorflow/tensorflow/issues/2604
+
+---
+
+How do I convert a directory of jpeg images to TFRecords file in tensorflow?
+http://stackoverflow.com/questions/33849617/how-do-i-convert-a-directory-of-jpeg-images-to-tfrecords-file-in-tensorflow
+------
+Tensor Transformations
+https://www.tensorflow.org/versions/r0.11/api_docs/python/array_ops.html#reshape
+
+-----
+
+TensorFlow - Read all examples from a TFRecords at once?
+http://stackoverflow.com/questions/37151895/tensorflow-read-all-examples-from-a-tfrecords-at-once
+
+----
+
+this is where i got the idea on how to load our labels vectors
+
+How to load sparse data with TensorFlow?
+http://stackoverflow.com/questions/36917807/how-to-load-sparse-data-with-tensorflow
+
+
+----
+
+tf cast
+
+https://www.tensorflow.org/versions/r0.11/api_docs/python/array_ops.html#cast
+
+------
+
+converting a numpy array into an image 
+http://stackoverflow.com/questions/2659312/how-do-i-convert-a-numpy-array-to-and-display-an-image
