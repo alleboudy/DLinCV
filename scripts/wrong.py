@@ -234,7 +234,7 @@ def create_posenet(weights_path=None):
     
     loss3_flat = Flatten()(cls3_pool)
     
-    cls3_fc1_pose = Dense(2048,activation='relu',name='cls3_fc1_pose',W_regularizer=l2(0.0002))(loss1_flat)
+    cls3_fc1_pose = Dense(2048,activation='relu',name='cls3_fc1_pose',W_regularizer=l2(0.0002))(loss3_flat)
     
     cls3_fc1 = Dropout(0.5)(cls3_fc1_pose)
     
