@@ -104,9 +104,9 @@ def create_posenet(weights_path=None):
     
     loss1_drop_fc = Dropout(0.7)(loss1_fc)
 
-    cls1_fc_pose_xyz = Dense(3,name='cls1_fc_pose_xyz',W_regularizer=l2(0.0002),init="normal")(loss1_drop_fc)
+    cls1_fc_pose_xyz = Dense(3,name='cls1_fc_pose_xyz',W_regularizer=l2(0.0002))(loss1_drop_fc)
 
-    cls1_fc_pose_wpqr = Dense(4,name='cls1_fc_pose_wpqr',W_regularizer=l2(0.0002),init="normal")(loss1_drop_fc)
+    cls1_fc_pose_wpqr = Dense(4,name='cls1_fc_pose_wpqr',W_regularizer=l2(0.0002))(loss1_drop_fc)
     
 #    loss1_classifier = Dense(1000,name='loss1/classifier',W_regularizer=l2(0.0002))(loss1_drop_fc)
     
@@ -174,9 +174,9 @@ def create_posenet(weights_path=None):
     
     loss2_drop_fc = Dropout(0.7)(loss2_fc)
 
-    cls2_fc_pose_xyz = Dense(3,name='cls2_fc_pose_xyz',W_regularizer=l2(0.0002),init="normal")(loss2_drop_fc)
+    cls2_fc_pose_xyz = Dense(3,name='cls2_fc_pose_xyz',W_regularizer=l2(0.0002))(loss2_drop_fc)
 
-    cls2_fc_pose_wpqr = Dense(4,name='cls2_fc_pose_wpqr',W_regularizer=l2(0.0002),init="normal")(loss2_drop_fc)
+    cls2_fc_pose_wpqr = Dense(4,name='cls2_fc_pose_wpqr',W_regularizer=l2(0.0002))(loss2_drop_fc)
     
 #    loss2_classifier = Dense(1000,name='loss2/classifier',W_regularizer=l2(0.0002))(loss2_drop_fc)
     
@@ -249,9 +249,9 @@ def create_posenet(weights_path=None):
 
     cls3_fc1 = Dropout(0.5)(cls3_fc1_pose)
 
-    cls3_fc_pose_xyz = Dense(3,name='cls3_fc_pose_xyz',W_regularizer=l2(0.0002),init="normal")(cls3_fc1)
+    cls3_fc_pose_xyz = Dense(3,name='cls3_fc_pose_xyz',W_regularizer=l2(0.0002))(cls3_fc1)
 
-    cls3_fc_pose_wpqr = Dense(4,name='cls3_fc_pose_wpqr',W_regularizer=l2(0.0002),init="normal")(cls3_fc1)
+    cls3_fc_pose_wpqr = Dense(4,name='cls3_fc_pose_wpqr',W_regularizer=l2(0.0002))(cls3_fc1)
     
 #    pool5_drop_7x7_s1 = Dropout(0.4)(loss3_flat)
     
