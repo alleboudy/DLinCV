@@ -265,7 +265,7 @@ def create_posenet(weights_path=None):
     posenet = Model(input=input, output=[cls1_fc_pose_xyz,cls2_fc_pose_xyz,cls3_fc_pose_xyz,cls1_fc_pose_wpqr,cls2_fc_pose_wpqr,cls3_fc_pose_wpqr])
     
     if weights_path:
-        posenet.load_weights(weights_path)
+        posenet.load_weights(weights_path,by_name=True)
     
     return posenet
 
