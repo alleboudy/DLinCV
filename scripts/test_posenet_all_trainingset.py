@@ -45,6 +45,16 @@ def ResizeCropImage(image):
     #cv2.waitKey(0)
 
 meanImage = getMean()
+#print meanImage.shape 
+         # Test pretrained model
+model = posenet.create_posenet('mergedweights.h5')
+sgd = SGD(lr=0.1, decay=1e-6, momentum=0.9, nesterov=True)
+model.compile(optimizer=sgd, loss='categorical_crossentropy')
+meantrasnformed = meanImage
+meantrasnformed[:,:,[0,1,2]]  = meanImage[:,:,[2,1,0]]
+meantrasnformed =  np.expand_dims(meantrasnformed, axis=0)
+meanout = model.predict(meantrasnformed)
+
 with open(directory+dataset) as f:
     next(f)  # skip the 3 header lines
     next(f)
@@ -71,15 +81,14 @@ with open(directory+dataset) as f:
         img[2, :, :] -= meanImage[2,:,:].mean()
         img[:,:,[0,1,2]] = img[:,:,[2,1,0]]
         img = np.expand_dims(img, axis=0)
-
-            # Test pretrained model
-        model = posenet.create_posenet('mergedweights.h5')
-        sgd = SGD(lr=0.1, decay=1e-6, momentum=0.9, nesterov=True)
-        model.compile(optimizer=sgd, loss='categorical_crossentropy')
         out = model.predict(img) # note: the model has three outputs
+	#for i in range(len(out)):
+	#	for j in range(len(out[i])):
+	#		out[i][j]+=meanout[i][j]
             #print np.argmax(out[2])
         print "predcited:"
-        print out
+        print out[2]
+	print out[5]
         print "actual:"
         print (p0,p1,p2,p3,p4,p5,p6)
 
