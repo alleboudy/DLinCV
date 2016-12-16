@@ -1,5 +1,5 @@
 import numpy as np
-#import caffe
+import caffe
 import cv2
 
 directory = "/usr/prakt/w065/posenet/KingsCollege/"
@@ -37,6 +37,7 @@ def getMean(meanFileLocation = 'imagemean.binaryproto'):
     return arr[0]
 
 #outputs two lists of numpy arrays
+meanImage =getMean()
 def BatchGenerator(batchSize,directory,dataset):
    
 	#print 'in batch generator'
@@ -59,7 +60,7 @@ def BatchGenerator(batchSize,directory,dataset):
                     img[:,:,[0,1,2]] = img[:,:,[2,1,0]]
                     img = np.expand_dims(img, axis=0)
                     imagesBatch.append(img)
-                    posesBatch.append(np.append(p0,p1,p2,p3,p4,p5,p6))
+                    posesBatch.append((p0,p1,p2,p3,p4,p5,p6))
                 #print fname 
 
-                yield imagesBatch,posesBatch
+                yield np.asarray(imagesBatch),np.asarray(posesBatch)
