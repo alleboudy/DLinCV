@@ -24,7 +24,7 @@ def ResizeCropImage(image):
     image = cv2.resize(image, dim, interpolation = cv2.INTER_AREA)
     centerWidth = image.shape[1]/2
     centerHeight = image.shape[0]/2
-    return image[centerHeight-122:centerHeight+122, centerWidth-122:centerWidth+122]
+    return image[centerHeight-112:centerHeight+112, centerWidth-112:centerWidth+112]
     #cv2.imshow("resized", resized)
     #cv2.waitKey(0)
 
@@ -49,7 +49,8 @@ def BatchGenerator(batchSize,directory,dataset):
             next(f)
             while(True):
 	        imagesBatch=[]
-	        posesBatch=[]
+	        po1=[]
+		po2=[]
 		for i in range(batchSize):
                     fname, p0,p1,p2,p3,p4,p5,p6 = next(f).split()
                     img = ResizeCropImage(cv2.imread(directory+fname )).astype(np.float32)
@@ -58,9 +59,11 @@ def BatchGenerator(batchSize,directory,dataset):
                     img[1, :, :] -= meanImage[1,:,:].mean()
                     img[2, :, :] -= meanImage[2,:,:].mean()
                     img[:,:,[0,1,2]] = img[:,:,[2,1,0]]
-                    img = np.expand_dims(img, axis=0)
+#                    img = np.expand_dims(img, axis=0)
                     imagesBatch.append(img)
-                    posesBatch.append((p0,p1,p2,p3,p4,p5,p6))
+		    po1.append(np.array((p0,p1,p2)))
+		    po2.append(np.array((p3,p4,p5,p6)))
+                  
                 #print fname 
-
-                yield np.asarray(imagesBatch),np.asarray(posesBatch)
+#		print po1.shape,p2.shape
+                yield np.asarray(imagesBatch),[np.asarray(po1),np.asarray(po2)]

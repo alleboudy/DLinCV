@@ -23,7 +23,8 @@ model.compile(optimizer='sgd', loss=posenet_loss)
 for e in range(nb_epoch):
 	print("epoch %d" % e)
 	for X_batch, Y_batch in utilities.BatchGenerator(32,directory,dataset):
-		history = model.fit(X_batch, Y_batch, batch_size=32,shuffle=True, nb_epoch=1)
+		#model.train(X_batch,Y_batch)
+		history = model.fit(X_batch, Y_batch,batch_size=32,shuffle=True,nb_epoch=1)
 		print history.history['loss']
 
 model.save_weights(outputWeightspath)
