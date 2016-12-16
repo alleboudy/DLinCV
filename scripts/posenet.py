@@ -262,7 +262,7 @@ def create_posenet(weights_path=None):
     
 #    googlenet = Model(input=input, output=[loss1_classifier_act,loss2_classifier_act,loss3_classifier_act])
 
-    posenet = Model(input=input, output=[cls1_fc_pose_xyz,cls2_fc_pose_xyz,cls3_fc_pose_xyz,cls1_fc_pose_wpqr,cls2_fc_pose_wpqr,cls3_fc_pose_wpqr])
+    posenet = Model(input=input, output=(np.append(cls3_fc_pose_xyz[0],cls3_fc_pose_wpqr[0]))
     
     if weights_path:
         posenet.load_weights(weights_path,by_name=True)
