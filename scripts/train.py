@@ -8,6 +8,8 @@ directory = "/usr/prakt/w065/posenet/KingsCollege/"
 dataset = 'dataset_train.txt'
  
 def posenet_loss(y_true, y_pred):
+	print type(y_true)
+	print "####### IN THE LOSS FUNCTION #####"
 	xyz_true=y_true[0:3]
 	wpqr_true = y_true[3:7]
 	xyz_pred=y_pred[0:3]
