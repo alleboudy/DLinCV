@@ -24,7 +24,9 @@ for e in range(nb_epoch):
 	print("epoch %d" % e)
 	for X_batch, Y_batch in utilities.BatchGenerator(32,directory,dataset):
 		#model.train(X_batch,Y_batch)
-		history = model.fit(X_batch, Y_batch,batch_size=32,shuffle=True,nb_epoch=1)
+		#history = model.fit(X_batch, Y_batch,batch_size=32,shuffle=True,nb_epoch=1)
+		history = model.fit(X_batch,{'cls3_fc_pose_wpqr': Y_batch[1], 'cls3_fc_pose_xyz': Y_batch[0]},
+          nb_epoch=1, batch_size=32)
 		print history.history['loss']
 
 model.save_weights(outputWeightspath)
