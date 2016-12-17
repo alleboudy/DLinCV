@@ -20,7 +20,7 @@ nb_epoch = 3
 print "creating the model"
 model =posenet.create_posenet('mergedweights.h5')
 #sgd = SGD(lr=0.1, decay=1e-6, momentum=0.9, nesterov=True)
-model.compile(optimizer='sgd', loss=posenet_loss)
+model.compile(optimizer='sgd', loss='mse')
 
 for e in range(nb_epoch):
 	print("epoch %d" % e)
