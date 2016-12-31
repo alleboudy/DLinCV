@@ -12,7 +12,7 @@ max_iterations = 30000
 # Set this path to your dataset directory
 directory = '/media/leboudy/New Volume/posenet/KingsCollege/'
 dataset = 'dataset_train.txt'
-historyloglocation = '{}traininghistory_{}.txt'.format(directory,str(time.time()))
+historyloglocation = '{}traininghistory_{}.txt'.fotmat(directory,str(time.time()))
 class datasource(object):
 	def __init__(self, images, poses):
 		self.images = images
