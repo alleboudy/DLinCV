@@ -10,7 +10,7 @@ import time
 batch_size = 75
 max_iterations = 30000
 # Set this path to your dataset directory
-directory = '/media/leboudy/New Volume/posenet/KingsCollege/'
+directory = '/usr/prakt/w065/posenet/OldHospital/'
 dataset = 'dataset_train.txt'
 historyloglocation = '{}traininghistory_{}.txt'.format(directory,str(time.time()))
 class datasource(object):
@@ -131,13 +131,13 @@ def main():
 	opt = tf.train.AdamOptimizer(learning_rate=0.0001, beta1=0.9, beta2=0.999, epsilon=0.00000001, use_locking=False, name='Adam').minimize(loss)
 
 	# Set GPU options
-	gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.6833)
+	#gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.6833)
 
 	init = tf.initialize_all_variables()
 	saver = tf.train.Saver()
 	outputFile = "PoseNet.ckpt"
 
-	with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
+	with tf.Session() as sess:
 		# Load the data
 		sess.run(init)
 		net.load('posenet.npy', sess)
@@ -162,4 +162,5 @@ def main():
 
 
 if __name__ == '__main__':
-	main()
+	with tf.device('/cpu:0'):
+		main()
