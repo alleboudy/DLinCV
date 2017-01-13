@@ -7,15 +7,18 @@ from posenet import GoogLeNet as PoseNet
 import cv2
 from tqdm import tqdm
 import math
-
+import time
 batch_size = 75
 max_iterations = 30000
 
 # Set this path to your project directory
-path = 'path_to_project/'
+path = '/usr/prakt/w065/DLinCV/scripts/tf-posenet/'
 # Set this path to your dataset directory
-directory = 'path_to_datasets/KingsCollege/'
+directory = '/usr/prakt/w065/posenet/OldHospital/'
 dataset = 'dataset_test.txt'
+
+historyloglocation = '{}testinghistory_{}.txt'.format(directory,str(time.time()))
+
 
 class datasource(object):
 	def __init__(self, images, poses):
@@ -162,4 +165,5 @@ def main():
 	print 'Median error ', median_result[0], 'm  and ', median_result[1], 'degrees.'
 
 if __name__ == '__main__':
-	main()
+	with tf.device('/cpu:0'):
+        	main()

@@ -3,31 +3,31 @@ import posenet
 import theano
 import numpy as np
 from keras.optimizers import SGD
-
+from keras import backend as K
 
 outputWeightspath = 'trainedweights.h5'
 BETA = 500 #to 2000 for outdoor
-directory = "/usr/prakt/w065/posenet/KingsCollege/"
+directory = "/usr/prakt/w065/posenet/OldHospital/"
 dataset = 'dataset_train.txt'
  
 
 
 def pose_loss12(y_true, y_pred):
 	print "####### IN THE POSE LOSS FUNCTION #####"
-	return 0.3* np.linalg.norm(y_true-y_pred) 
+	return 0.3* K.abs(y_pred - y_true) 
 
 def rotation_loss12(y_true, y_pred):
 	print "####### IN THE ROTATION LOSS FUNCTION #####"
-	return  150* np.linalg.norm(y_true-y_pred/np.linalg.norm(y_pred))
+	return  150* K.abs(y_true-y_pred/K.abs(y_pred))
 
 
 def pose_loss3(y_true, y_pred):
         print "####### IN THE POSE LOSS FUNCTION #####"
-        return  np.linalg.norm(y_true-y_pred)
+        return K.abs(y_pred - y_true)
 
 def rotation_loss3(y_true, y_pred):
         print "####### IN THE ROTATION LOSS FUNCTION #####"
-        return  BETA *np.linalg.norm(y_true-y_pred/np.linalg.norm(y_pred))
+        return  BETA *K.abs(y_true-y_pred/K.abs(y_pred))
 
 
 
