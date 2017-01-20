@@ -6,7 +6,7 @@ from keras.optimizers import SGD
 from keras import backend as K
 import time
 outputWeightspath = 'oldhospitaltrainedweights.h5'
-BETA = 1000 #to 2000 for outdoor
+BETA = 500 #to 2000 for outdoor
 directory = "/usr/prakt/w065/posenet/OldHospital/"
 #dataset = 'dataset_train.txt'
 historyloglocation = '{}OldHospitaltraininghistory_{}.txt'.format(directory,str(time.time()))
@@ -17,20 +17,20 @@ Validationhistoryloglocation = '{}validationhistory_{}.txt'.format(directory,str
 
 def pose_loss12(y_true, y_pred):
 	print "####### IN THE POSE LOSS FUNCTION #####"
-	return 0.3* K.mean(((K.abs(y_pred - y_true)))) 
+	return 0.3* K.sqrt(K.sum(K.square((y_pred - y_true)))) 
 
 def rotation_loss12(y_true, y_pred):
 	print "####### IN THE ROTATION LOSS FUNCTION #####"
-	return  150* K.mean(((K.abs(y_true-y_pred))))
+	return 150* K.sqrt(K.sum(K.square((y_true-y_pred))))
 
 
 def pose_loss3(y_true, y_pred):
         print "####### IN THE POSE LOSS FUNCTION #####"
-        return K.mean(((K.abs(y_pred - y_true))))
+        return K.sqrt(K.sum(K.square((y_pred - y_true))))
 
 def rotation_loss3(y_true, y_pred):
         print "####### IN THE ROTATION LOSS FUNCTION #####"
-        return  BETA *K.mean(((K.abs(y_true-y_pred))))
+        return  BETA *K.sqrt(K.sum(K.square((y_true-y_pred))))
 
 
 
@@ -54,7 +54,7 @@ for i in range(nb_epochs):
 		#history = model.fit(X_batch, Y_batch,batch_size=32,shuffle=True,nb_epoch=1)
 	
 	history = model.fit(X_batch,{'cls1_fc_pose_wpqr': Y_batch[1], 'cls1_fc_pose_xyz': Y_batch[0],'cls2_fc_pose_wpqr': Y_batch[1], 'cls2_fc_pose_xyz': Y_batch[0],'cls3_fc_pose_wpqr': Y_batch[1], 'cls3_fc_pose_xyz': Y_batch[0]},
-          nb_epoch=1,batch_size=25)
+          nb_epoch=1,batch_size=utilities.batchSize)
 	print 'epoch: ', i
 	print 'loss: ',history.history['loss'][0]
 	with open(historyloglocation,"a+") as f:
