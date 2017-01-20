@@ -14,9 +14,9 @@ max_iterations = 30000
 
 # Set this path to your project directory
 path = settings.path
-# Set this path to your dataset directory
+# Set this pateti to your dataset directory
 directory = settings.directory
-dataset = 'dataset_test.txt'
+dataset = 'dataset_validation.txt'
 
 historyloglocation = '{}testinghistory_{}.txt'.format(directory,str(time.time()))
 
@@ -118,53 +118,54 @@ def gen_data_batch(source):
             pose_q_batch.append(pose_q)
         yield np.array(image_batch), np.array(pose_x_batch), np.array(pose_q_batch)
 
-def main():
-	image = tf.placeholder(tf.float32, [1, 224, 224, 3])
-	datasource = get_data()
-	results = np.zeros((len(datasource.images),2))
+def getValidationResults():
+	with tf.device('/cpu:1'):
+		image = tf.placeholder(tf.float32, [1, 224, 224, 3])
+		datasource = get_data()
+		results = np.zeros((len(datasource.images),2))
 
-	net = PoseNet({'data': image})
+		net = PoseNet({'data': image})
 
-	p3_x = net.layers['cls3_fc_pose_xyz']
-	p3_q = net.layers['cls3_fc_pose_wpqr']
+		p3_x = net.layers['cls3_fc_pose_xyz']
+		p3_q = net.layers['cls3_fc_pose_wpqr']
 
-	init = tf.initialize_all_variables()
-	outputFile = "PoseNet.ckpt"
+		init = tf.initialize_all_variables()
+		outputFile = "PoseNet.ckpt"
 
-	saver = tf.train.Saver()
+		saver = tf.train.Saver()
 
-	with tf.Session() as sess:
-		# Load the data
-		sess.run(init)
-		saver.restore(sess, path + 'PoseNet.ckpt')
+		with tf.Session() as sess:
+			# Load the data
+			sess.run(init)
+			saver.restore(sess, path + 'PoseNet.ckpt')
 
-		data_gen = gen_data_batch(datasource)
-		for i in range(len(datasource.images)):
-			np_image = datasource.images[i]
-			feed = {image: np_image}
+			data_gen = gen_data_batch(datasource)
+			for i in range(len(datasource.images)):
+				np_image = datasource.images[i]
+				feed = {image: np_image}
 
 
-			pose_q= np.asarray(datasource.poses[i][3:7])
-			pose_x= np.asarray(datasource.poses[i][0:3])
-			predicted_x, predicted_q = sess.run([p3_x, p3_q], feed_dict=feed)
+				pose_q= np.asarray(datasource.poses[i][3:7])
+				pose_x= np.asarray(datasource.poses[i][0:3])
+				predicted_x, predicted_q = sess.run([p3_x, p3_q], feed_dict=feed)
 
-			pose_q = np.squeeze(pose_q)
-			pose_x = np.squeeze(pose_x)
-			predicted_q = np.squeeze(predicted_q)
-			predicted_x = np.squeeze(predicted_x)
+				pose_q = np.squeeze(pose_q)
+				pose_x = np.squeeze(pose_x)
+				predicted_q = np.squeeze(predicted_q)
+				predicted_x = np.squeeze(predicted_x)
 
-			#Compute Individual Sample Error
-			q1 = pose_q / np.linalg.norm(pose_q)
-			q2 = predicted_q / np.linalg.norm(predicted_q)
-			d = abs(np.sum(np.multiply(q1,q2)))
-			theta = 2 * np.arccos(d) * 180/math.pi
-			error_x = np.linalg.norm(pose_x-predicted_x)
-			results[i,:] = [error_x,theta]
-			print 'Iteration:  ', i, '  Error XYZ (m):  ', error_x, '  Error Q (degrees):  ', theta
+				#Compute Individual Sample Error
+				q1 = pose_q / np.linalg.norm(pose_q)
+				q2 = predicted_q / np.linalg.norm(predicted_q)
+				d = abs(np.sum(np.multiply(q1,q2)))
+				theta = 2 * np.arccos(d) * 180/math.pi
+				error_x = np.linalg.norm(pose_x-predicted_x)
+				results[i,:] = [error_x,theta]
+				#print 'Iteration:  ', i, '  Error XYZ (m):  ', error_x, '  Error Q (degrees):  ', theta
 
 	median_result = np.median(results,axis=0)
-	print 'Median error ', median_result[0], 'm  and ', median_result[1], 'degrees.'
+	return  median_result[0],  median_result[1]
 
-if __name__ == '__main__':
-	with tf.device('/cpu:0'):
-        	main()
+#if __name__ == '__main__':
+#	with tf.device('/cpu:0'):
+ #       	main()

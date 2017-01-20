@@ -1,12 +1,12 @@
 import numpy as np
 import caffe
 import cv2
-
-directory = "/usr/prakt/w065/posenet/KingsCollege/"
+import random
+directory = "/usr/prakt/w065/posenet/OldHospital/"
 dataset = 'dataset_train.txt'
 dataLocation= 'directory+dataset'
-
-
+meanFile = 'oldhospitaltrainmean.binaryproto'
+batchSize=25
 #resizes a given image so that the smallest dimension is 256 then crops 244X244 from the middle of it
 def ResizeCropImage(image):
     # we need to keep in mind aspect ratio so the image does
@@ -37,22 +37,27 @@ def getMean(meanFileLocation = 'imagemean.binaryproto'):
     return arr[0]
 
 #outputs two lists of numpy arrays
-meanImage =getMean()
-def BatchGenerator(batchSize,directory,dataset):
-   
+meanImage =getMean(meanFile)
+def get_data():
+	imagesBatch=[]
+        po1=[]
+   	po2=[]
 	#print 'in batch generator'
-        
-        with open(directory+dataset) as f:
-	    #print 'opened file' 
-            next(f)  # skip the 3 header lines
-            next(f)
-            next(f)
-            while(True):
-	        imagesBatch=[]
-	        po1=[]
-		po2=[]
-		for i in range(batchSize):
-                    fname, p0,p1,p2,p3,p4,p5,p6 = next(f).split()
+        #while(True):
+   #while(True):
+   # print 'lol1'
+    #while(True):
+	#print'lol2'
+	with open(directory+dataset) as f:
+	   	print 'opened file' 
+          	next(f)  # skip the 3 header lines
+           	next(f)
+           	next(f)
+           #while(True):
+		#print 'lol3'	
+	  
+		for line in f:
+                    fname, p0,p1,p2,p3,p4,p5,p6 = line.split()
                     img = ResizeCropImage(cv2.imread(directory+fname )).astype(np.float32)
                     img = img.transpose((2, 0, 1))
                     img[0, :, :] -= meanImage[0,:,:].mean()
@@ -64,6 +69,32 @@ def BatchGenerator(batchSize,directory,dataset):
 		    po1.append(np.array((p0,p1,p2)))
 		    po2.append(np.array((p3,p4,p5,p6)))
                   
-                #print fname 
+       
 #		print po1.shape,p2.shape
-                yield np.asarray(imagesBatch),[np.asarray(po1),np.asarray(po2)]
+	return (np.asarray(imagesBatch),[np.asarray(po1),np.asarray(po2)])
+def gen_data(source):
+	while True:
+		indices = range(len(source[0]))
+		random.shuffle(indices)
+		for i in indices:
+			image = source[0][i]
+			pose_x = source[1][0][i]
+			pose_q = source[1][1][i]
+			yield image, pose_x, pose_q
+
+
+
+
+def gen_data_batch(source):
+    data_gen = gen_data(source)
+    while True:
+        image_batch = []
+        pose_x_batch = []
+        pose_q_batch = []
+        for _ in range(batchSize):
+            image, pose_x, pose_q = next(data_gen)
+            image_batch.append(image)
+            pose_x_batch.append(pose_x)
+            pose_q_batch.append(pose_q)
+        yield np.array(image_batch), [np.array(pose_x_batch), np.array(pose_q_batch)]
+

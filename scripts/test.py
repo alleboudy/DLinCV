@@ -8,16 +8,17 @@ from keras.optimizers import SGD
 from custom_layers import PoolHelper,LRN
 import caffe
 import cv2
-directory = "/usr/prakt/w065/posenet/KingsCollege/"
+directory = "/usr/prakt/w065/posenet/OldHospital/"
 
-dataset = 'dataset_train.txt'
+dataset = 'dataset_test.txt'
 outputDirectory = "/usr/prakt/w065/posenet/TFData/"
-meanFileLocation = 'imagemean.binaryproto'
-
+meanFileLocation = 'oldhospitaltrainmean.binaryproto'
+weightsfile='oldhospitaltrainedweights.h5'
+#weightsfile='shoptrainedweights.h5'
 poses = [] #will contain poses followed by qs
 images = []
 
-limitingCounter=3
+#limitingCounter=3
 def getMean():
     blob = caffe.proto.caffe_pb2.BlobProto()
     data = open( meanFileLocation, 'rb' ).read()
@@ -47,22 +48,23 @@ def ResizeCropImage(image):
 meanImage = getMean()
 #print meanImage.shape 
          # Test pretrained model
-model = posenet.create_posenet('mergedweights.h5')
+model = posenet.create_posenet(weightsfile)
 sgd = SGD(lr=0.1, decay=1e-6, momentum=0.9, nesterov=True)
 model.compile(optimizer=sgd, loss='categorical_crossentropy')
 meantrasnformed = meanImage
 meantrasnformed[:,:,[0,1,2]]  = meanImage[:,:,[2,1,0]]
 meantrasnformed =  np.expand_dims(meantrasnformed, axis=0)
-meanout = model.predict(meantrasnformed)
-
+posxs=[]
+posqs=[]
+#meanout = model.predict(meantrasnformed)
 with open(directory+dataset) as f:
     next(f)  # skip the 3 header lines
     next(f)
     next(f)
     for line in f:
-        if limitingCounter ==0:
-            break
-	limitingCounter-=1
+        #if limitingCounter ==0:
+        #   break
+	#limitingCounter-=1
         fname, p0,p1,p2,p3,p4,p5,p6 = line.split()
         p0 = float(p0)
         p1 = float(p1)
@@ -86,9 +88,20 @@ with open(directory+dataset) as f:
 	#	for j in range(len(out[i])):
 	#		out[i][j]+=meanout[i][j]
             #print np.argmax(out[2])
-        print "predcited:"
-        print out[2]
-	print out[5]
+        
+	print "predcited:"
+        posx= out[2]
+	posq= out[5]
         print "actual:"
-        print (p0,p1,p2,p3,p4,p5,p6)
+        actualx= (p0,p1,p2)
+	actualq=(p3,p4,p5,p6)
+	q1= actualq/np.linalg.norm(actualq)
+	q2 = posq/np.linalg.norm(posq)
+	d = abs(np.sum(np.multiply(q1,q2)))
+	theta =2*np.arccos(d)*180/np.pi
+	errx=np.linalg.norm(actualx-posx)
+	posxs.append(errx)
+	posqs.append(theta)
+	print 'errx ', errx, ' m and ', 'errq ', theta,' degrees'
+print 'median error',np.median(posxs), ' m and ', np.median(posqs), ' degrees'
 

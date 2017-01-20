@@ -6,13 +6,20 @@ from posenet import GoogLeNet as PoseNet
 import cv2
 from tqdm import tqdm
 import time
+import validate
 
-batch_size = 75
+import settings
+
+
+
+batch_size = 30
 max_iterations = 30000
 # Set this path to your dataset directory
-directory = '/usr/prakt/w065/posenet/OldHospital/'
+directory = settings.directory
 dataset = 'dataset_train.txt'
 historyloglocation = '{}traininghistory_{}.txt'.format(directory,str(time.time()))
+Validationhistoryloglocation = '{}validationhistory_{}.txt'.format(directory,str(time.time()))
+
 class datasource(object):
 	def __init__(self, images, poses):
 		self.images = images
@@ -154,13 +161,16 @@ def main():
 			    f.write('{},{}\n'.format(str(i), str(np_loss)))
 			if i % 20 == 0:
 				print("iteration: " + str(i) + "\n\t" + "Loss is: " + str(np_loss))
-			if i % 5000 == 0:
+			if i % 500 == 0:
 				saver.save(sess, outputFile)
 				print("Intermediate file saved at: " + outputFile)
+				#posXMedianError,posQMedianError = validate.getValidationResults()
+				#with open(Validationhistoryloglocation,"a+") as f:
+				#	f.write('{},{},{}\n'.format(str(i),str(posXMedianError),str(posQMedianError)))
 		saver.save(sess, outputFile)
-		print("Intermediate file saved at: " + outputFile)
+		print("Final file saved at: " + outputFile)
 
 
 if __name__ == '__main__':
-	with tf.device('/cpu:0'):
+	#with tf.device('/cpu:0'):
 		main()
