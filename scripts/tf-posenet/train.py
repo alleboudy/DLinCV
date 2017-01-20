@@ -162,7 +162,7 @@ def main():
 			    f.write('{},{}\n'.format(str(i), str(np_loss)))
 			if i % 20 == 0:
 				print("iteration: " + str(i) + "\n\t" + "Loss is: " + str(np_loss))
-			if i % 500 == 0:
+			if i % 50 == 0:
 				saver.save(sess, outputFile)
 				print("Intermediate file saved at: " + outputFile)
 				#posXMedianError,posQMedianError = validate.getValidationResults()
