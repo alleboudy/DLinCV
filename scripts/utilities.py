@@ -6,7 +6,7 @@ directory = "/usr/prakt/w065/posenet/OldHospital/"
 dataset = 'dataset_train.txt'
 dataLocation= 'directory+dataset'
 meanFile = 'oldhospitaltrainmean.binaryproto'
-batchSize=1
+batchSize=25
 #resizes a given image so that the smallest dimension is 256 then crops 244X244 from the middle of it
 def ResizeCropImage(image):
     # we need to keep in mind aspect ratio so the image does

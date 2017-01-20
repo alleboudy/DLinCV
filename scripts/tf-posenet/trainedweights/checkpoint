@@ -1,0 +1,2 @@
+model_checkpoint_path: "shop_weights1484928962.1.ckpt"
+all_model_checkpoint_paths: "shop_weights1484928962.1.ckpt"
