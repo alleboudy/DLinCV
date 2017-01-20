@@ -6,8 +6,7 @@ from posenet import GoogLeNet as PoseNet
 import cv2
 from tqdm import tqdm
 import time
-import validate
-
+#import validate
 import settings
 
 
