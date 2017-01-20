@@ -17,8 +17,9 @@ max_iterations = 30000
 # Set this path to your dataset directory
 directory = settings.directory
 dataset = 'dataset_train.txt'
-historyloglocation = '{}traininghistory_{}.txt'.format(directory,str(time.time()))
-Validationhistoryloglocation = '{}validationhistory_{}.txt'.format(directory,str(time.time()))
+historyloglocation = './losslogs/{}traininghistory_{}.txt'.format(settings.logprefix,str(time.time()))
+weightsoutputlocation='./trainedweights/{}_weights{}.ckpt'.format(settings.logprefix,str(time.time()))
+#Validationhistoryloglocation = '{}validationhistory_{}.txt'.format(directory,str(time.time()))
 
 class datasource(object):
 	def __init__(self, images, poses):
@@ -142,7 +143,7 @@ def main():
 
 	init = tf.initialize_all_variables()
 	saver = tf.train.Saver()
-	outputFile = "PoseNet.ckpt"
+	outputFile = weightsoutputlocation
 
 	with tf.Session() as sess:
 		# Load the data
