@@ -2,10 +2,10 @@ import numpy as np
 import caffe
 import cv2
 import random
-directory = "/usr/prakt/w065/posenet/OldHospital/"
+import settings
+directory = settings.directory# "/usr/prakt/w065/posenet/OldHospital/"
 dataset = 'dataset_train.txt'
-dataLocation= 'directory+dataset'
-meanFile = 'oldhospitaltrainmean.binaryproto'
+meanFile = settings.meanFile #'oldhospitaltrainmean.binaryproto'
 batchSize=20
 #resizes a given image so that the smallest dimension is 256 then crops 244X244 from the middle of it
 def ResizeCropImage(image):

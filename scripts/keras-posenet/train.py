@@ -6,15 +6,16 @@ from keras.optimizers import SGD
 from keras.optimizers import Adam
 from keras import backend as K
 import time
-outputWeightspath = 'oldhospitaltrainedweights.h5'
-BETA = 500 #to 2000 for outdoor
-directory = "/usr/prakt/w065/posenet/OldHospital/"
+import settings
+outputWeightspath =settings.outputWeightspath #'oldhospitaltrainedweights.h5'
+BETA = settings.BETA #to 2000 for outdoor
+directory = settings.directory#"/usr/prakt/w065/posenet/OldHospital/"
 #dataset = 'dataset_train.txt'
-historyloglocation = '{}OldHospitaltraininghistory_{}.txt'.format(directory,str(time.time()))
-
-Validationhistoryloglocation = '{}validationhistory_{}.txt'.format(directory,str(time.time()))
+#historyloglocation = '{}traininghistory_{}.txt'.format(directory,str(time.time()))
+historyloglocation = './losslogs/{}traininghistory_{}.txt'.format(settings.logprefix,str(time.time()))
+#Validationhistoryloglocation = '{}validationhistory_{}.txt'.format(directory,str(time.time()))
 #startweight = 'oldhospitaltrainedweights.h5' 
-startweight='../mergedweights.h5'
+startweight= settings.startweight #'../mergedweights.h5'
 
 def pose_loss12(y_true, y_pred):
 	print "####### IN THE POSE LOSS FUNCTION #####"
@@ -40,7 +41,7 @@ def rotation_loss3(y_true, y_pred):
 nb_epochs = 30000
 print "creating the model"
 model =posenet.create_posenet(startweight)
-sgd = Adam(lr=0.0000001, beta_1=0.9, beta_2=0.999, epsilon=0.00000001)
+sgd = Adam(lr=settings.lr, beta_1=settings.beta_1, beta_2=settings.beta_2, epsilon=settings.epsilon)
 #sgd = SGD(lr=0.000001, decay=1e-6, momentum=0.9, nesterov=True)
 model.compile(optimizer=sgd, loss=[pose_loss12,rotation_loss12,pose_loss12,rotation_loss12,pose_loss3,rotation_loss3])
 
