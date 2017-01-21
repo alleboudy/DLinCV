@@ -13,8 +13,8 @@ directory = "/usr/prakt/w065/posenet/OldHospital/"
 historyloglocation = '{}OldHospitaltraininghistory_{}.txt'.format(directory,str(time.time()))
 
 Validationhistoryloglocation = '{}validationhistory_{}.txt'.format(directory,str(time.time()))
-startweight = 'oldhospitaltrainedweights.h5' 
-
+#startweight = 'oldhospitaltrainedweights.h5' 
+startweight='../mergedweights.h5'
 
 def pose_loss12(y_true, y_pred):
 	print "####### IN THE POSE LOSS FUNCTION #####"
@@ -40,7 +40,7 @@ def rotation_loss3(y_true, y_pred):
 nb_epochs = 30000
 print "creating the model"
 model =posenet.create_posenet(startweight)
-sgd = Adam(lr=0.0001, beta_1=0.9, beta_2=0.999, epsilon=0.00000001)
+sgd = Adam(lr=0.0000001, beta_1=0.9, beta_2=0.999, epsilon=0.00000001)
 #sgd = SGD(lr=0.000001, decay=1e-6, momentum=0.9, nesterov=True)
 model.compile(optimizer=sgd, loss=[pose_loss12,rotation_loss12,pose_loss12,rotation_loss12,pose_loss3,rotation_loss3])
 
