@@ -11,8 +11,8 @@ import settings
 
 
 
-batch_size = 30
-max_iterations = 30000
+batch_size = settings.batchSize
+max_iterations = settings.max_iterations
 # Set this path to your dataset directory
 directory = settings.directory
 dataset = 'dataset_train.txt'
