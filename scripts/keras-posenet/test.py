@@ -8,12 +8,12 @@ from keras.optimizers import SGD
 from custom_layers import PoolHelper,LRN
 import caffe
 import cv2
-directory = "/usr/prakt/w065/posenet/OldHospital/"
+directory = "/usr/prakt/w065/posenet/sm/"
 
 dataset = 'dataset_test.txt'
 outputDirectory = "/usr/prakt/w065/posenet/TFData/"
-meanFileLocation = 'oldhospitaltrainmean.binaryproto'
-weightsfile='oldhospitaltrainedweights.h5'
+meanFileLocation = 'smmean.binaryproto'
+weightsfile='smtrainedweights.h5'
 #weightsfile='shoptrainedweights.h5'
 poses = [] #will contain poses followed by qs
 images = []

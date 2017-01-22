@@ -1,2 +1,7 @@
+<<<<<<< HEAD
 model_checkpoint_path: "ShopFacade_weights1484998673.24.ckpt"
 all_model_checkpoint_paths: "ShopFacade_weights1484998673.24.ckpt"
+=======
+model_checkpoint_path: "sm_weights1485046411.47.ckpt"
+all_model_checkpoint_paths: "sm_weights1485046411.47.ckpt"
+>>>>>>> 88a314f0fdd04a530ff41f551c1bb289e62bd0ec

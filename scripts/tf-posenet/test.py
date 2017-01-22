@@ -13,13 +13,13 @@ batch_size = 75
 max_iterations = 30000
 
 # Set this path to your project directory
-path = settings.path
+#path = settings.path
 # Set this path to your dataset directory
 directory = settings.directory
 dataset = 'dataset_test.txt'
 
-historyloglocation = '{}testinghistory_{}.txt'.format(directory,str(time.time()))
-
+#historyloglocation = '{}testinghistory_{}.txt'.format(directory,str(time.time()))
+weightsPath=settings.weightsPath
 
 class datasource(object):
 	def __init__(self, images, poses):
@@ -136,7 +136,7 @@ def main():
 	with tf.Session() as sess:
 		# Load the data
 		sess.run(init)
-		saver.restore(sess, path + 'PoseNet.ckpt')
+		saver.restore(sess,weightsPath)
 
 		data_gen = gen_data_batch(datasource)
 		for i in range(len(datasource.images)):
