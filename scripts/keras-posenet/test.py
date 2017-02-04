@@ -8,6 +8,7 @@ from keras.optimizers import SGD
 from custom_layers import PoolHelper,LRN
 import caffe
 import cv2
+import utilities
 directory = "/usr/prakt/w065/posenet/sm/"
 
 dataset = 'dataset_test.txt'
@@ -28,20 +29,20 @@ def getMean():
 
 
 
-def ResizeCropImage(image):
+#def ResizeCropImage(image):
     # we need to keep in mind aspect ratio so the image does
     # not look skewed or distorted -- therefore, we calculate
     # the ratio of the new image to the old image
-    if image.shape[0]<image.shape[1]:
-        r = 256.0 / image.shape[0]
-        dim = ( 256,int(image.shape[1] * r))
-    else:
-        r = 256.0 / image.shape[1]
-        dim = ( int(image.shape[0] * r),256)
+ #   if image.shape[0]<image.shape[1]:
+  #      r = 256.0 / image.shape[0]
+   #     dim = ( 256,int(image.shape[1] * r))
+    #else:
+     #   r = 256.0 / image.shape[1]
+      #  dim = ( int(image.shape[0] * r),256)
 
 
     # perform the actual resizing of the image and show it
-    return cv2.resize(image, dim, interpolation = cv2.INTER_AREA)[0:224, 0:224]
+    #return cv2.resize(image, dim, interpolation = cv2.INTER_AREA)[0:224, 0:224]
     #cv2.imshow("resized", resized)
     #cv2.waitKey(0)
 
@@ -75,7 +76,7 @@ with open(directory+dataset) as f:
         p6 = float(p6)
         #poses.append((p0,p1,p2,p3,p4,p5,p6))
         #images.append(directory+fname)
-        img = ResizeCropImage(imread(directory+fname )).astype(np.float32)
+        img = utilities.ResizeCropImage(imread(directory+fname )).astype(np.float32)
 
         img = img.transpose((2, 0, 1))
         img[0, :, :] -= meanImage[0,:,:].mean()

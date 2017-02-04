@@ -1,12 +1,12 @@
 from scipy.misc import imread, imresize
 import numpy as np
-
+from LRN2D import LRN2D
 from keras.layers import Input, Dense, Convolution2D, MaxPooling2D, AveragePooling2D, ZeroPadding2D, Dropout, Flatten, merge, Reshape, Activation
 from keras.models import Model
 from keras.regularizers import l2
 from keras.optimizers import SGD
-from custom_layers import PoolHelper,LRN
-
+from custom_layers import PoolHelper#,LRN2D
+import tensorflow as tf
 
 def create_posenet(weights_path=None):
     # creates GoogLeNet a.k.a. Inception v1 (Szegedy, 2015)
@@ -21,13 +21,13 @@ def create_posenet(weights_path=None):
 
     pool1_3x3_s2 = MaxPooling2D(pool_size=(3,3),strides=(2,2),border_mode='valid',name='pool1/3x3_s2')(pool1_helper)
 
-    pool1_norm1 = LRN(name='pool1/norm1')(pool1_3x3_s2)
+    pool1_norm1 = LRN2D(name='pool1/norm1')(pool1_3x3_s2)
 
     conv2_3x3_reduce = Convolution2D(1,1,64,border_mode='same',activation='relu',name='conv2/3x3_reduce',W_regularizer=l2(0.0002))(pool1_norm1)
 
     conv2_3x3 = Convolution2D(3,3,192,border_mode='same',activation='relu',name='conv2/3x3',W_regularizer=l2(0.0002))(conv2_3x3_reduce)
 
-    conv2_norm2 = LRN(name='conv2/norm2')(conv2_3x3)
+    conv2_norm2 = LRN2D(name='conv2/norm2')(conv2_3x3)
 
     conv2_zero_pad = ZeroPadding2D(padding=(1, 1))(conv2_norm2)
 
@@ -268,3 +268,4 @@ def create_posenet(weights_path=None):
         posenet.load_weights(weights_path,by_name=True)
 
     return posenet
+

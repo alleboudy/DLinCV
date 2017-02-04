@@ -59,10 +59,10 @@ def get_data():
 		for line in f:
                     fname, p0,p1,p2,p3,p4,p5,p6 = line.split()
                     img = ResizeCropImage(cv2.imread(directory+fname )).astype(np.float32)
-                    img = img.transpose((2, 0, 1))
-                    img[0, :, :] -= meanImage[0,:,:].mean()
-                    img[1, :, :] -= meanImage[1,:,:].mean()
-                    img[2, :, :] -= meanImage[2,:,:].mean()
+                    #img = img.transpose((2, 0, 1))
+                    img[:, :, 0] -= meanImage[0,:,:].mean()
+                    img[:, :, 1] -= meanImage[1,:,:].mean()
+                    img[:, :, 2] -= meanImage[2,:,:].mean()
                     img[:,:,[0,1,2]] = img[:,:,[2,1,0]]
 #                    img = np.expand_dims(img, axis=0)
                     imagesBatch.append(img)
