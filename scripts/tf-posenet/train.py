@@ -127,16 +127,15 @@ def main():
 	p3_x = net.layers['cls3_fc_pose_xyz']
 	p3_q = net.layers['cls3_fc_pose_wpqr']
 
-	l1_x = tf.sqrt(tf.reduce_sum(tf.square(tf.sub(p1_x, poses_x)))) * 0.3
-	l1_q = tf.sqrt(tf.reduce_sum(tf.square(tf.sub(p1_q, poses_q)))) * 150
-	l2_x = tf.sqrt(tf.reduce_sum(tf.square(tf.sub(p2_x, poses_x)))) * 0.3
-	l2_q = tf.sqrt(tf.reduce_sum(tf.square(tf.sub(p2_q, poses_q)))) * 150
+	l1_x = tf.sqrt(tf.reduce_sum(tf.square(tf.sub(p1_x, poses_x)))) * settings.xyzfactor
+	l1_q = tf.sqrt(tf.reduce_sum(tf.square(tf.sub(p1_q, poses_q)))) * settings.beta_small
+	l2_x = tf.sqrt(tf.reduce_sum(tf.square(tf.sub(p2_x, poses_x)))) *settings.xyzfactor
+	l2_q = tf.sqrt(tf.reduce_sum(tf.square(tf.sub(p2_q, poses_q)))) * settings.beta_small
 	l3_x = tf.sqrt(tf.reduce_sum(tf.square(tf.sub(p3_x, poses_x)))) * 1
-	l3_q = tf.sqrt(tf.reduce_sum(tf.square(tf.sub(p3_q, poses_q)))) * 500
+	l3_q = tf.sqrt(tf.reduce_sum(tf.square(tf.sub(p3_q, poses_q)))) * settings.BETA
 
 	loss = l1_x + l1_q + l2_x + l2_q + l3_x + l3_q
-	opt = tf.train.AdamOptimizer(learning_rate=0.0001, beta1=0.9, beta2=0.999, epsilon=0.00000001, use_locking=False, name='Adam').minimize(loss)
-
+	opt = tf.train.AdamOptimizer(learning_rate=settings.lr, beta1=settings.beta_1, beta2=settings.beta_2, epsilon=settings.epsilon, use_locking=False, name='Adam').minimize(loss)
 	# Set GPU options
 	#gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.6833)
 
