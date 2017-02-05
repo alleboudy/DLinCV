@@ -35,16 +35,16 @@ def ResizeCropImage(image):
 # extracts the mean image form a given mean file
 
 
-def getMean(meanFileLocation='imagemean.binaryproto'):
+def getMean():
     #blob = caffe.proto.caffe_pb2.BlobProto()
     #data = open( meanFileLocation, 'rb' ).read()
     # blob.ParseFromString(data)
     #arr = np.array( caffe.io.blobproto_to_array(blob) )
-    return np.load(meanFileLocation)
+    return np.load(meanFile)
     # return #arr[0]
 
 # outputs two lists of numpy arrays
-meanImage = getMean(meanFile)
+meanImage = getMean()
 
 
 def get_data():

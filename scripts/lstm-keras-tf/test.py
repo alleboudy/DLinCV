@@ -10,6 +10,7 @@ from custom_layers import PoolHelper#,LRN
 import cv2
 import utilities
 from LRN2D import LRN2D as LRN
+import settings
 directory = settings.directory #"/usr/prakt/w065/posenet/sm/"
 
 dataset = 'dataset_test.txt'
