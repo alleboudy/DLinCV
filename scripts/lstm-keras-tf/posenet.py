@@ -7,7 +7,7 @@ from keras.regularizers import l2
 from keras.optimizers import SGD
 from custom_layers import PoolHelper  # ,LRN
 from LRN2D import LRN2D as LRN
- 
+import settings
 
 def create_posenet(weights_path=None):
     # creates GoogLeNet a.k.a. Inception v1 (Szegedy, 2015)
