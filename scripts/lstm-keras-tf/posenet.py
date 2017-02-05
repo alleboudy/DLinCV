@@ -64,72 +64,72 @@ def create_posenet(weights_path=None):
     inception_3a_output = merge([inception_3a_1x1, inception_3a_3x3, inception_3a_5x5,
                                  inception_3a_pool_proj], mode='concat', concat_axis=2, name='inception_3a/output')
 
-    inception_3b_1x1 = Convolution2D(128, 1, 1, border_mode='same', activation='relu',
-                                     name='inception_3b/1x1', W_regularizer=l2(0.0002))(inception_3a_output)
+    inception_3b_1x1 =TimeDistributed( Convolution2D(128, 1, 1, border_mode='same', activation='relu',
+                                     name='inception_3b/1x1', W_regularizer=l2(0.0002)))(inception_3a_output)
 
-    inception_3b_3x3_reduce = Convolution2D(128, 1, 1, border_mode='same', activation='relu',
-                                            name='inception_3b/3x3_reduce', W_regularizer=l2(0.0002))(inception_3a_output)
+    inception_3b_3x3_reduce = TimeDistributed(Convolution2D(128, 1, 1, border_mode='same', activation='relu',
+                                            name='inception_3b/3x3_reduce', W_regularizer=l2(0.0002)))(inception_3a_output)
 
-    inception_3b_3x3 = Convolution2D(192, 3, 3, border_mode='same', activation='relu',
-                                     name='inception_3b/3x3', W_regularizer=l2(0.0002))(inception_3b_3x3_reduce)
+    inception_3b_3x3 = TimeDistributed(Convolution2D(192, 3, 3, border_mode='same', activation='relu',
+                                     name='inception_3b/3x3', W_regularizer=l2(0.0002)))(inception_3b_3x3_reduce)
 
-    inception_3b_5x5_reduce = Convolution2D(32, 1, 1, border_mode='same', activation='relu',
-                                            name='inception_3b/5x5_reduce', W_regularizer=l2(0.0002))(inception_3a_output)
+    inception_3b_5x5_reduce = TimeDistributed(Convolution2D(32, 1, 1, border_mode='same', activation='relu',
+                                            name='inception_3b/5x5_reduce', W_regularizer=l2(0.0002)))(inception_3a_output)
 
-    inception_3b_5x5 = Convolution2D(96, 5, 5, border_mode='same', activation='relu',
-                                     name='inception_3b/5x5', W_regularizer=l2(0.0002))(inception_3b_5x5_reduce)
+    inception_3b_5x5 = TimeDistributed(Convolution2D(96, 5, 5, border_mode='same', activation='relu',
+                                     name='inception_3b/5x5', W_regularizer=l2(0.0002)))(inception_3b_5x5_reduce)
 
-    inception_3b_pool = MaxPooling2D(pool_size=(3, 3), strides=(
-        1, 1), border_mode='same', name='inception_3b/pool')(inception_3a_output)
+    inception_3b_pool = TimeDistributed(MaxPooling2D(pool_size=(3, 3), strides=(
+        1, 1), border_mode='same', name='inception_3b/pool'))(inception_3a_output)
 
-    inception_3b_pool_proj = Convolution2D(64, 1, 1, border_mode='same', activation='relu',
-                                           name='inception_3b/pool_proj', W_regularizer=l2(0.0002))(inception_3b_pool)
+    inception_3b_pool_proj = TimeDistributed(Convolution2D(64, 1, 1, border_mode='same', activation='relu',
+                                           name='inception_3b/pool_proj', W_regularizer=l2(0.0002)))(inception_3b_pool)
 
     inception_3b_output = merge([inception_3b_1x1, inception_3b_3x3, inception_3b_5x5,
-                                 inception_3b_pool_proj], mode='concat', concat_axis=1, name='inception_3b/output')
+                                 inception_3b_pool_proj], mode='concat', concat_axis=2, name='inception_3b/output')
 
-    inception_3b_output_zero_pad = ZeroPadding2D(
-        padding=(1, 1))(inception_3b_output)
+    inception_3b_output_zero_pad = TimeDistributed(ZeroPadding2D(
+        padding=(1, 1)))(inception_3b_output)
 
     pool3_helper = PoolHelper()(inception_3b_output_zero_pad)
 
-    pool3_3x3_s2 = MaxPooling2D(pool_size=(3, 3), strides=(
-        2, 2), border_mode='valid', name='pool3/3x3_s2')(pool3_helper)
+    pool3_3x3_s2 = TimeDistributed(MaxPooling2D(pool_size=(3, 3), strides=(
+        2, 2), border_mode='valid', name='pool3/3x3_s2'))(pool3_helper)
 
-    inception_4a_1x1 = Convolution2D(192, 1, 1, border_mode='same', activation='relu',
-                                     name='inception_4a/1x1', W_regularizer=l2(0.0002))(pool3_3x3_s2)
+    inception_4a_1x1 = TimeDistributed(Convolution2D(192, 1, 1, border_mode='same', activation='relu',
+                                     name='inception_4a/1x1', W_regularizer=l2(0.0002)))(pool3_3x3_s2)
 
-    inception_4a_3x3_reduce = Convolution2D(
-        96, 1, 1, border_mode='same', activation='relu', name='inception_4a/3x3_reduce', W_regularizer=l2(0.0002))(pool3_3x3_s2)
+    inception_4a_3x3_reduce = TimeDistributed(Convolution2D(
+        96, 1, 1, border_mode='same', activation='relu', name='inception_4a/3x3_reduce', W_regularizer=l2(0.0002)))(pool3_3x3_s2)
 
-    inception_4a_3x3 = Convolution2D(208, 3, 3, border_mode='same', activation='relu',
-                                     name='inception_4a/3x3', W_regularizer=l2(0.0002))(inception_4a_3x3_reduce)
+    inception_4a_3x3 = TimeDistributed(Convolution2D(208, 3, 3, border_mode='same', activation='relu',
+                                     name='inception_4a/3x3', W_regularizer=l2(0.0002)))(inception_4a_3x3_reduce)
 
-    inception_4a_5x5_reduce = Convolution2D(
-        16, 1, 1, border_mode='same', activation='relu', name='inception_4a/5x5_reduce', W_regularizer=l2(0.0002))(pool3_3x3_s2)
+    inception_4a_5x5_reduce = TimeDistributed(Convolution2D(
+        16, 1, 1, border_mode='same', activation='relu', name='inception_4a/5x5_reduce', W_regularizer=l2(0.0002)))(pool3_3x3_s2)
 
-    inception_4a_5x5 = Convolution2D(48, 5, 5, border_mode='same', activation='relu',
-                                     name='inception_4a/5x5', W_regularizer=l2(0.0002))(inception_4a_5x5_reduce)
+    inception_4a_5x5 = TimeDistributed(Convolution2D(48, 5, 5, border_mode='same', activation='relu',
+                                     name='inception_4a/5x5', W_regularizer=l2(0.0002)))(inception_4a_5x5_reduce)
 
-    inception_4a_pool = MaxPooling2D(pool_size=(3, 3), strides=(
-        1, 1), border_mode='same', name='inception_4a/pool')(pool3_3x3_s2)
+    inception_4a_pool = TimeDistributed(MaxPooling2D(pool_size=(3, 3), strides=(
+        1, 1), border_mode='same', name='inception_4a/pool'))(pool3_3x3_s2)
 
-    inception_4a_pool_proj = Convolution2D(64, 1, 1, border_mode='same', activation='relu',
-                                           name='inception_4a/pool_proj', W_regularizer=l2(0.0002))(inception_4a_pool)
+    inception_4a_pool_proj = TimeDistributed(Convolution2D(64, 1, 1, border_mode='same', activation='relu',
+                                           name='inception_4a/pool_proj', W_regularizer=l2(0.0002)))(inception_4a_pool)
 
     inception_4a_output = merge([inception_4a_1x1, inception_4a_3x3, inception_4a_5x5,
-                                 inception_4a_pool_proj], mode='concat', concat_axis=1, name='inception_4a/output')
+                                 inception_4a_pool_proj], mode='concat', concat_axis=2, name='inception_4a/output')
 
-    loss1_ave_pool = AveragePooling2D(pool_size=(5, 5), strides=(
-        3, 3), name='loss1/ave_pool')(inception_4a_output)
+    loss1_ave_pool = TimeDistributed(AveragePooling2D(pool_size=(5, 5), strides=(
+        3, 3), name='loss1/ave_pool'))(inception_4a_output)
 
-    loss1_conv = Convolution2D(128, 1, 1, border_mode='same', activation='relu',
-                               name='loss1/conv', W_regularizer=l2(0.0002))(loss1_ave_pool)
+    loss1_conv = TimeDistributed(Convolution2D(128, 1, 1, border_mode='same', activation='relu',
+                               name='loss1/conv', W_regularizer=l2(0.0002)))(loss1_ave_pool)
 
-    loss1_flat = Flatten()(loss1_conv)
+    loss1_flat = TimeDistributed(Flatten())(loss1_conv)
 
-    loss1_fc = Dense(1024, activation='relu', name='loss1/fc',
-                     W_regularizer=l2(0.0002))(loss1_flat)
+    loss1_fc = TimeDistributed(Dense(1024, activation='relu', name='loss1/fc',
+                     W_regularizer=l2(0.0002)))(loss1_flat)
 
     loss1_drop_fc = Dropout(0.7)(loss1_fc)
 
