@@ -61,8 +61,8 @@ def create_posenet(weights_path=None):
     inception_3a_pool_proj = TimeDistributed(Convolution2D(32, 1, 1, border_mode='same', activation='relu',
                                            name='inception_3a/pool_proj', W_regularizer=l2(0.0002)))(inception_3a_pool)
 
-    inception_3a_output =TimeDistributed( merge([inception_3a_1x1, inception_3a_3x3, inception_3a_5x5,
-                                 inception_3a_pool_proj], mode='concat', concat_axis=1, name='inception_3a/output'))
+    inception_3a_output = merge([inception_3a_1x1, inception_3a_3x3, inception_3a_5x5,
+                                 inception_3a_pool_proj], mode='concat', concat_axis=2, name='inception_3a/output')
 
     inception_3b_1x1 = Convolution2D(128, 1, 1, border_mode='same', activation='relu',
                                      name='inception_3b/1x1', W_regularizer=l2(0.0002))(inception_3a_output)
