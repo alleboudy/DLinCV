@@ -18,10 +18,10 @@ def create_posenet(weights_path=None):
 
     conv1_zero_pad = TimeDistributed(ZeroPadding2D(padding=(1, 1)))(conv1_7x7_s2)
 
-    pool1_helper = PoolHelper()(conv1_zero_pad)
+    #pool1_helper = PoolHelper()(conv1_zero_pad)
 
     pool1_3x3_s2 = TimeDistributed(MaxPooling2D(pool_size=(3, 3), strides=(
-        2, 2), border_mode='valid', name='pool1/3x3_s2'))(pool1_helper)
+        2, 2), border_mode='valid', name='pool1/3x3_s2'))(conv1_zero_pad)
 
     pool1_norm1 = LRN(name='pool1/norm1')(pool1_3x3_s2)
 
@@ -35,10 +35,10 @@ def create_posenet(weights_path=None):
 
     conv2_zero_pad = TimeDistributed(ZeroPadding2D(padding=(1, 1)))(conv2_norm2)
 
-    pool2_helper = PoolHelper()(conv2_zero_pad)
+    #pool2_helper = PoolHelper()(conv2_zero_pad)
 
     pool2_3x3_s2 =TimeDistributed( MaxPooling2D(pool_size=(3, 3), strides=(
-        2, 2), border_mode='valid', name='pool2/3x3_s2'))(pool2_helper)
+        2, 2), border_mode='valid', name='pool2/3x3_s2'))(conv2_zero_pad)
 
     inception_3a_1x1 =TimeDistributed( Convolution2D(64, 1, 1, border_mode='same', activation='relu',
                                      name='inception_3a/1x1', W_regularizer=l2(0.0002)))(pool2_3x3_s2)
@@ -91,10 +91,10 @@ def create_posenet(weights_path=None):
     inception_3b_output_zero_pad = TimeDistributed(ZeroPadding2D(
         padding=(1, 1)))(inception_3b_output)
 
-    pool3_helper = PoolHelper()(inception_3b_output_zero_pad)
+    #pool3_helper = PoolHelper()(inception_3b_output_zero_pad)
 
     pool3_3x3_s2 = TimeDistributed(MaxPooling2D(pool_size=(3, 3), strides=(
-        2, 2), border_mode='valid', name='pool3/3x3_s2'))(pool3_helper)
+        2, 2), border_mode='valid', name='pool3/3x3_s2'))(inception_3b_output_zero_pad)
 
     inception_4a_1x1 = TimeDistributed(Convolution2D(192, 1, 1, border_mode='same', activation='relu',
                                      name='inception_4a/1x1', W_regularizer=l2(0.0002)))(pool3_3x3_s2)
@@ -265,10 +265,10 @@ def create_posenet(weights_path=None):
     inception_4e_output_zero_pad = TimeDistributed(ZeroPadding2D(
         padding=(1, 1)))(inception_4e_output)
 
-    pool4_helper = PoolHelper()(inception_4e_output_zero_pad)
+    #pool4_helper = PoolHelper()(inception_4e_output_zero_pad)
 
     pool4_3x3_s2 = TimeDistributed(MaxPooling2D(pool_size=(3, 3), strides=(
-        2, 2), border_mode='valid', name='pool4/3x3_s2'))(pool4_helper)
+        2, 2), border_mode='valid', name='pool4/3x3_s2'))(inception_4e_output_zero_pad)
 
     inception_5a_1x1 = TimeDistributed(Convolution2D(256, 1, 1, border_mode='same', activation='relu',
                                      name='inception_5a/1x1', W_regularizer=l2(0.0002)))(pool4_3x3_s2)
