@@ -87,9 +87,11 @@ for i in range(settings.stepSize):
     img[1, :, :] -= meanImage[1, :, :].mean()
     img[2, :, :] -= meanImage[2, :, :].mean()
     #img[:,:,[0,1,2]] = img[:,:,[2,1,0]]
-    img = np.expand_dims(img, axis=0)
+    #img = np.expand_dims(img, axis=0)
     imgs.append(img)
-out = model.predict(imgs)  # note: the model has three outputs
+print len(imgs)
+print np.asarray(imgs).shape
+out = model.predict(np.expand_dims(np.asarray(imgs),axis=0))  # note: the model has three outputs
 # for i in range(len(out)):
 #	for j in range(len(out[i])):
 #		out[i][j]+=meanout[i][j]
