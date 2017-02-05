@@ -5,10 +5,11 @@ from keras.layers import Input, Dense, Convolution2D, MaxPooling2D, AveragePooli
 from keras.models import Model
 from keras.regularizers import l2
 from keras.optimizers import SGD
-from custom_layers import PoolHelper,LRN
+from custom_layers import PoolHelper#,LRN
 import caffe
 import cv2
 import utilities
+from LRN2D import LRN2D as LRN
 directory = "/usr/prakt/w065/posenet/sm/"
 
 dataset = 'dataset_test.txt'
@@ -52,9 +53,9 @@ meanImage = getMean()
 model = posenet.create_posenet(weightsfile)
 sgd = SGD(lr=0.1, decay=1e-6, momentum=0.9, nesterov=True)
 model.compile(optimizer=sgd, loss='categorical_crossentropy')
-meantrasnformed = meanImage
-meantrasnformed[:,:,[0,1,2]]  = meanImage[:,:,[2,1,0]]
-meantrasnformed =  np.expand_dims(meantrasnformed, axis=0)
+#meantrasnformed = meanImage
+#meantrasnformed[:,:,[0,1,2]]  = meanImage[:,:,[2,1,0]]
+#meantrasnformed =  np.expand_dims(meantrasnformed, axis=0)
 posxs=[]
 posqs=[]
 #meanout = model.predict(meantrasnformed)
@@ -79,10 +80,10 @@ with open(directory+dataset) as f:
         img = utilities.ResizeCropImage(imread(directory+fname )).astype(np.float32)
 
         img = img.transpose((2, 0, 1))
-        img[0, :, :] -= meanImage[0,:,:].mean()
-        img[1, :, :] -= meanImage[1,:,:].mean()
-        img[2, :, :] -= meanImage[2,:,:].mean()
-        img[:,:,[0,1,2]] = img[:,:,[2,1,0]]
+        img[0,:, :] -= meanImage[0,:,:].mean()
+        img[1,:, :] -= meanImage[1,:,:].mean()
+        img[2,:, :] -= meanImage[2,:,:].mean()
+        #img[:,:,[0,1,2]] = img[:,:,[2,1,0]]
         img = np.expand_dims(img, axis=0)
         out = model.predict(img) # note: the model has three outputs
 	#for i in range(len(out)):
