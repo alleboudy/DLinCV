@@ -16,38 +16,38 @@ def create_posenet(weights_path=None):
     conv1_7x7_s2 = TimeDistributed(Convolution2D(64, 7, 7, subsample=(
         2, 2), border_mode='same', activation='relu', name='conv1/7x7_s2', W_regularizer=l2(0.0002)))(input)
 
-    conv1_zero_pad = ZeroPadding2D(padding=(1, 1))(conv1_7x7_s2)
+    conv1_zero_pad = TimeDistributed(ZeroPadding2D(padding=(1, 1)))(conv1_7x7_s2)
 
-    pool1_helper = PoolHelper()(conv1_zero_pad)
+    pool1_helper =TimeDistributed( PoolHelper())(conv1_zero_pad)
 
-    pool1_3x3_s2 = MaxPooling2D(pool_size=(3, 3), strides=(
-        2, 2), border_mode='valid', name='pool1/3x3_s2')(pool1_helper)
+    pool1_3x3_s2 = TimeDistributed(MaxPooling2D(pool_size=(3, 3), strides=(
+        2, 2), border_mode='valid', name='pool1/3x3_s2'))(pool1_helper)
 
     pool1_norm1 = LRN(name='pool1/norm1')(pool1_3x3_s2)
 
-    conv2_3x3_reduce = Convolution2D(64, 1, 1, border_mode='same', activation='relu',
-                                     name='conv2/3x3_reduce', W_regularizer=l2(0.0002))(pool1_norm1)
+    conv2_3x3_reduce = TimeDistributed(Convolution2D(64, 1, 1, border_mode='same', activation='relu',
+                                     name='conv2/3x3_reduce', W_regularizer=l2(0.0002)))(pool1_norm1)
 
-    conv2_3x3 = Convolution2D(192, 3, 3, border_mode='same', activation='relu',
-                              name='conv2/3x3', W_regularizer=l2(0.0002))(conv2_3x3_reduce)
+    conv2_3x3 =TimeDistributed( Convolution2D(192, 3, 3, border_mode='same', activation='relu',
+                              name='conv2/3x3', W_regularizer=l2(0.0002)))(conv2_3x3_reduce)
 
     conv2_norm2 = LRN(name='conv2/norm2')(conv2_3x3)
 
-    conv2_zero_pad = ZeroPadding2D(padding=(1, 1))(conv2_norm2)
+    conv2_zero_pad = TimeDistributed(ZeroPadding2D(padding=(1, 1)))(conv2_norm2)
 
     pool2_helper = PoolHelper()(conv2_zero_pad)
 
-    pool2_3x3_s2 = MaxPooling2D(pool_size=(3, 3), strides=(
-        2, 2), border_mode='valid', name='pool2/3x3_s2')(pool2_helper)
+    pool2_3x3_s2 =TimeDistributed( MaxPooling2D(pool_size=(3, 3), strides=(
+        2, 2), border_mode='valid', name='pool2/3x3_s2'))(pool2_helper)
 
-    inception_3a_1x1 = Convolution2D(64, 1, 1, border_mode='same', activation='relu',
-                                     name='inception_3a/1x1', W_regularizer=l2(0.0002))(pool2_3x3_s2)
+    inception_3a_1x1 =TimeDistributed( Convolution2D(64, 1, 1, border_mode='same', activation='relu',
+                                     name='inception_3a/1x1', W_regularizer=l2(0.0002)))(pool2_3x3_s2)
 
-    inception_3a_3x3_reduce = Convolution2D(
-        96, 1, 1, border_mode='same', activation='relu', name='inception_3a/3x3_reduce', W_regularizer=l2(0.0002))(pool2_3x3_s2)
+    inception_3a_3x3_reduce = TimeDistributed(Convolution2D(
+        96, 1, 1, border_mode='same', activation='relu', name='inception_3a/3x3_reduce', W_regularizer=l2(0.0002)))(pool2_3x3_s2)
 
-    inception_3a_3x3 = Convolution2D(128, 3, 3, border_mode='same', activation='relu',
-                                     name='inception_3a/3x3', W_regularizer=l2(0.0002))(inception_3a_3x3_reduce)
+    inception_3a_3x3 = TimeDistributed(Convolution2D(128, 3, 3, border_mode='same', activation='relu',
+                                     name='inception_3a/3x3', W_regularizer=l2(0.0002)))(inception_3a_3x3_reduce)
 
     inception_3a_5x5_reduce = Convolution2D(
         16, 1, 1, border_mode='same', activation='relu', name='inception_3a/5x5_reduce', W_regularizer=l2(0.0002))(pool2_3x3_s2)
