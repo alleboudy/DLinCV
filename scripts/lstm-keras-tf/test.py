@@ -6,27 +6,27 @@ from keras.models import Model
 from keras.regularizers import l2
 from keras.optimizers import SGD
 from custom_layers import PoolHelper#,LRN
-import caffe
+#import caffe
 import cv2
 import utilities
 from LRN2D import LRN2D as LRN
-directory = "/usr/prakt/w065/posenet/sm/"
+directory = settings.directory #"/usr/prakt/w065/posenet/sm/"
 
 dataset = 'dataset_test.txt'
-outputDirectory = "/usr/prakt/w065/posenet/TFData/"
-meanFileLocation = 'smmean.binaryproto'
-weightsfile='tfsmtrainedweights.h5'#'75batbhessmtrainedweights.h5'#'smtrainedweights.h5'
+#outputDirectory = "/usr/prakt/w065/posenet/TFData/"
+#meanFileLocation = 'smmean.binaryproto'
+weightsfile=settings.outputWeightspath#'tfsmtrainedweights.h5'#'75batbhessmtrainedweights.h5'#'smtrainedweights.h5'
 #weightsfile='shoptrainedweights.h5'
 poses = [] #will contain poses followed by qs
 images = []
 
 #limitingCounter=3
-def getMean():
-    blob = caffe.proto.caffe_pb2.BlobProto()
-    data = open( meanFileLocation, 'rb' ).read()
-    blob.ParseFromString(data)
-    arr = np.array( caffe.io.blobproto_to_array(blob) )
-    return arr[0]
+#def getMean():
+    #blob = caffe.proto.caffe_pb2.BlobProto()
+    #data = open( meanFileLocation, 'rb' ).read()
+    #blob.ParseFromString(data)
+    #arr = np.array( caffe.io.blobproto_to_array(blob) )
+    #return arr[0]
 
 
 
@@ -47,7 +47,7 @@ def getMean():
     #cv2.imshow("resized", resized)
     #cv2.waitKey(0)
 
-meanImage = getMean()
+meanImage = utilities.getMean()
 #print meanImage.shape 
          # Test pretrained model
 model = posenet.create_posenet(weightsfile)
