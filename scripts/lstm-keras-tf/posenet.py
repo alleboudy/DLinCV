@@ -18,7 +18,7 @@ def create_posenet(weights_path=None):
 
     conv1_zero_pad = TimeDistributed(ZeroPadding2D(padding=(1, 1)))(conv1_7x7_s2)
 
-    pool1_helper =TimeDistributed( PoolHelper())(conv1_zero_pad)
+    pool1_helper = PoolHelper()(conv1_zero_pad)
 
     pool1_3x3_s2 = TimeDistributed(MaxPooling2D(pool_size=(3, 3), strides=(
         2, 2), border_mode='valid', name='pool1/3x3_s2'))(pool1_helper)
@@ -49,17 +49,17 @@ def create_posenet(weights_path=None):
     inception_3a_3x3 = TimeDistributed(Convolution2D(128, 3, 3, border_mode='same', activation='relu',
                                      name='inception_3a/3x3', W_regularizer=l2(0.0002)))(inception_3a_3x3_reduce)
 
-    inception_3a_5x5_reduce = Convolution2D(
-        16, 1, 1, border_mode='same', activation='relu', name='inception_3a/5x5_reduce', W_regularizer=l2(0.0002))(pool2_3x3_s2)
+    inception_3a_5x5_reduce =TimeDistributed( Convolution2D(
+        16, 1, 1, border_mode='same', activation='relu', name='inception_3a/5x5_reduce', W_regularizer=l2(0.0002)))(pool2_3x3_s2)
 
-    inception_3a_5x5 = Convolution2D(32, 5, 5, border_mode='same', activation='relu',
-                                     name='inception_3a/5x5', W_regularizer=l2(0.0002))(inception_3a_5x5_reduce)
+    inception_3a_5x5 = TimeDistributed(Convolution2D(32, 5, 5, border_mode='same', activation='relu',
+                                     name='inception_3a/5x5', W_regularizer=l2(0.0002)))(inception_3a_5x5_reduce)
 
-    inception_3a_pool = MaxPooling2D(pool_size=(3, 3), strides=(
-        1, 1), border_mode='same', name='inception_3a/pool')(pool2_3x3_s2)
+    inception_3a_pool = TimeDistributed( MaxPooling2D(pool_size=(3, 3), strides=(
+        1, 1), border_mode='same', name='inception_3a/pool'))(pool2_3x3_s2)
 
-    inception_3a_pool_proj = Convolution2D(32, 1, 1, border_mode='same', activation='relu',
-                                           name='inception_3a/pool_proj', W_regularizer=l2(0.0002))(inception_3a_pool)
+    inception_3a_pool_proj = TimeDistributed(Convolution2D(32, 1, 1, border_mode='same', activation='relu',
+                                           name='inception_3a/pool_proj', W_regularizer=l2(0.0002)))(inception_3a_pool)
 
     inception_3a_output = merge([inception_3a_1x1, inception_3a_3x3, inception_3a_5x5,
                                  inception_3a_pool_proj], mode='concat', concat_axis=1, name='inception_3a/output')
