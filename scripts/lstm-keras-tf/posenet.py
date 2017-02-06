@@ -332,9 +332,8 @@ def create_posenet(weights_path=None):
                              W_regularizer=l2(0.0002)))(cls3_fc1)
 
 
-    lstm = recurrent.LSTM(128)(ls3_fc_pose_128)
-    ls3_fc_pose_128_out = TimeDistributed(Dense(128, name='cls3_fc_pose_128_out',
-                             W_regularizer=l2(0.0002)))(lstm)
+    lstm = recurrent.LSTM(128, return_sequences=True)(ls3_fc_pose_128)
+    ls3_fc_pose_128_out = TimeDistributed(Dense(128))(lstm)
 
 
     cls3_fc_pose_xyz = TimeDistributed(Dense(3, name='cls3_fc_pose_xyz',
