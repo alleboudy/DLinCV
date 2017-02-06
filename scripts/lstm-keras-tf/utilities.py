@@ -3,7 +3,7 @@ import numpy as np
 import cv2
 import random
 import settings
-directory = settings.directory  
+directory = settings.directory
 # "/usr/prakt/w065/posenet/OldHospital/"
 dataset = 'dataset_train.txt'
 meanFile = settings.meanFile  # 'oldhospitaltrainmean.binaryproto'
@@ -87,12 +87,14 @@ def get_data():
 def gen_data(source):
     while True:
         indices = range(len(source[0]))
-        #random.shuffle(indices)
+        random.shuffle(indices)
         for i in indices:
             image = source[0][i]
+            image_left = source[0][max(0, i - 1)]
+            image_right = source[0][min(i + 1, len(source[0]) - 1)]
             pose_x = source[1][0][i]
             pose_q = source[1][1][i]
-            yield image, pose_x, pose_q
+            yield np.asarray([image_left, image, image_right]), pose_x, pose_q
 
 
 def gen_data_batch(source):
@@ -106,4 +108,4 @@ def gen_data_batch(source):
             image_batch.append(image)
             pose_x_batch.append(pose_x)
             pose_q_batch.append(pose_q)
-        yield np.array(image_batch), [np.array(pose_x_batch), np.array(pose_q_batch)]
+        yield np.asarray(image_batch), [np.array(pose_x_batch), np.array(pose_q_batch)]

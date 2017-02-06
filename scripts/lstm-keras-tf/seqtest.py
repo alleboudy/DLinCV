@@ -1,5 +1,5 @@
 import numpy as np
-import posenet
+import cnn_lstm
 from scipy.misc import imread, imresize
 from keras.layers import Input, Dense, Convolution2D, MaxPooling2D, AveragePooling2D, ZeroPadding2D, Dropout, Flatten, merge, Reshape, Activation
 from keras.models import Model
@@ -50,7 +50,7 @@ images = []
 meanImage = utilities.getMean()
 # print meanImage.shape
 # Test pretrained model
-model = posenet.create_posenet(weightsfile)
+model = cnn_lstm.create_cnn_lstm(weightsfile)
 sgd = SGD(lr=0.1, decay=1e-6, momentum=0.9, nesterov=True)
 model.compile(optimizer=sgd, loss='categorical_crossentropy')
 #meantrasnformed = meanImage
@@ -68,6 +68,7 @@ seq =[
 
 
 #meanout = model.predict(meantrasnformed)
+inputs = np.zeros([1,3,3,224,224])
 for i in range(settings.stepSize):
     fname, p0, p1, p2, p3, p4, p5, p6 = seq[i].split()
     p0 = float(p0)
@@ -88,19 +89,21 @@ for i in range(settings.stepSize):
     img[2, :, :] -= meanImage[2, :, :].mean()
     #img[:,:,[0,1,2]] = img[:,:,[2,1,0]]
     #img = np.expand_dims(img, axis=0)
-    imgs.append(img)
-print len(imgs)
-print np.asarray(imgs).shape
-out = model.predict(np.expand_dims(np.asarray(imgs),axis=0))  # note: the model has three outputs
+    inputs[0,i,:,:,:] = img
+    #imgs.append(img)
+#print len(imgs)
+#print np.asarray(imgs).shape
+out = model.predict(inputs)  # note: the model has three outputs
+#out = model.predict(np.expand_dims(np.asarray(imgs),axis=0))  # note: the model has three outputs
 # for i in range(len(out)):
 #	for j in range(len(out[i])):
 #		out[i][j]+=meanout[i][j]
 # print np.argmax(out[2])
-
-print "predcited:"
-posx = out[2]
-posq = out[5]
-print "actual:"
+print out
+#print "predcited:"
+#posx = out[2]
+#posq = out[5]
+'''print "actual:"
 actualx = (p0, p1, p2)
 actualq = (p3, p4, p5, p6)
 q1 = actualq / np.linalg.norm(actualq)
@@ -112,3 +115,4 @@ posxs.append(errx)
 posqs.append(theta)
 print 'errx ', errx, ' m and ', 'errq ', theta, ' degrees'
 print 'median error', np.median(posxs), ' m and ', np.median(posqs), ' degrees'
+'''

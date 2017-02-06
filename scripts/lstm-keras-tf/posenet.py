@@ -326,20 +326,24 @@ def create_posenet(weights_path=None):
     cls3_fc1_pose = TimeDistributed(Dense(2048, activation='relu', name='cls3_fc1_pose',
                           W_regularizer=l2(0.0002), init="normal"))(loss3_flat)
 
-    cls3_fc1 = Dropout(0.5)(cls3_fc1_pose)
+    cls3_fc_pose_128 = TimeDistributed(Dense(128,  name='cls3_fc_pose_128',
+                             W_regularizer=l2(0.0002)))(cls3_fc1_pose)
+    cls3_fc1 = Dropout(0.5)(cls3_fc_pose_128)
 
-    ls3_fc_pose_128 = TimeDistributed(Dense(128, name='cls3_fc_pose_128',
-                             W_regularizer=l2(0.0002)))(cls3_fc1)
 
 
-    lstm = recurrent.LSTM(128, return_sequences=True)(ls3_fc_pose_128)
+   
+
+
+    lstm = recurrent.LSTM(128, return_sequences=False,input_shape=(settings.stepSize,128))(cls3_fc1)
     #ls3_fc_pose_128_out = TimeDistributed(Dense(128))(lstm)
+    #lstm2 = recurrent.LSTM(128, return_sequences=False)(lstm)
 
 
-    cls3_fc_pose_xyz = TimeDistributed(Dense(3, name='cls3_fc_pose_xyz',
+    cls3_fc_pose_xyz = (Dense(3, name='cls3_fc_pose_xyz',
                              W_regularizer=l2(0.0002)))(lstm)
 
-    cls3_fc_pose_wpqr = TimeDistributed(Dense(
+    cls3_fc_pose_wpqr = (Dense(
         4, name='cls3_fc_pose_wpqr', W_regularizer=l2(0.0002)))(lstm)
 
 #    pool5_drop_7x7_s1 = Dropout(0.4)(loss3_flat)
