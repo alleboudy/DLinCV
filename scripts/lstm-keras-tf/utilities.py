@@ -73,7 +73,7 @@ def get_data():
             img[0, :, :] -= meanImage[0, :, :].mean()
             img[1, :, :] -= meanImage[1, :, :].mean()
             img[2, :, :] -= meanImage[2, :, :].mean()
-            img[:, :, [0, 1, 2]] = img[:, :, [2, 1, 0]]
+            #img[:, :, [0, 1, 2]] = img[:, :, [2, 1, 0]]
 #                    img = np.expand_dims(img, axis=0)
             imagesBatch.append(img)
             po1.append(np.array((p0, p1, p2)))
@@ -87,7 +87,7 @@ def get_data():
 def gen_data(source):
     while True:
         indices = range(len(source[0]))
-        random.shuffle(indices)
+        #random.shuffle(indices)
         for i in indices:
             image = source[0][i]
             pose_x = source[1][0][i]
