@@ -1,7 +1,7 @@
 from scipy.misc import imread, imresize
 import numpy as np
 
-from keras.layers import TimeDistributed, Input, Dense, Convolution2D, MaxPooling2D, AveragePooling2D, ZeroPadding2D, Dropout, Flatten, merge, Reshape, Activation
+from keras.layers import recurrent,TimeDistributed, Input, Dense, Convolution2D, MaxPooling2D, AveragePooling2D, ZeroPadding2D, Dropout, Flatten, merge, Reshape, Activation
 from keras.models import Model
 from keras.regularizers import l2
 from keras.optimizers import SGD
@@ -328,11 +328,18 @@ def create_posenet(weights_path=None):
 
     cls3_fc1 = Dropout(0.5)(cls3_fc1_pose)
 
-    cls3_fc_pose_xyz = TimeDistributed(Dense(3, name='cls3_fc_pose_xyz',
+    ls3_fc_pose_128 = TimeDistributed(Dense(128, name='cls3_fc_pose_128',
                              W_regularizer=l2(0.0002)))(cls3_fc1)
 
+
+    lstm = recurrent.LSTM(128)(ls3_fc_pose_128)
+   
+
+    cls3_fc_pose_xyz = TimeDistributed(Dense(3, name='cls3_fc_pose_xyz',
+                             W_regularizer=l2(0.0002)))(lstm)
+
     cls3_fc_pose_wpqr = TimeDistributed(Dense(
-        4, name='cls3_fc_pose_wpqr', W_regularizer=l2(0.0002)))(cls3_fc1)
+        4, name='cls3_fc_pose_wpqr', W_regularizer=l2(0.0002)))(lstm)
 
 #    pool5_drop_7x7_s1 = Dropout(0.4)(loss3_flat)
 
