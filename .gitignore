@@ -1,3 +1,5 @@
 settings.py
 settings.pyc
 settings.py~
+*.pyc
+*.*~
