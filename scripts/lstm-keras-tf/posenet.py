@@ -333,13 +333,15 @@ def create_posenet(weights_path=None):
 
 
     lstm = recurrent.LSTM(128)(ls3_fc_pose_128)
-   
-
-    cls3_fc_pose_xyz = TimeDistributed(Dense(3, name='cls3_fc_pose_xyz',
+    ls3_fc_pose_128_out = TimeDistributed(Dense(128, name='cls3_fc_pose_128_out',
                              W_regularizer=l2(0.0002)))(lstm)
 
+
+    cls3_fc_pose_xyz = TimeDistributed(Dense(3, name='cls3_fc_pose_xyz',
+                             W_regularizer=l2(0.0002)))(ls3_fc_pose_128_out)
+
     cls3_fc_pose_wpqr = TimeDistributed(Dense(
-        4, name='cls3_fc_pose_wpqr', W_regularizer=l2(0.0002)))(lstm)
+        4, name='cls3_fc_pose_wpqr', W_regularizer=l2(0.0002)))(ls3_fc_pose_128_out)
 
 #    pool5_drop_7x7_s1 = Dropout(0.4)(loss3_flat)
 
