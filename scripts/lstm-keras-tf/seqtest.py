@@ -68,6 +68,7 @@ seq = [
 counter = 0
 with open(settings.testsetpath) as f:
     inputs = np.zeros([1, 3, 3, 224, 224])
+    labels = np.zeros([1, 3, 7])
     for line in f:
         fname, p0, p1, p2, p3, p4, p5, p6 = line.split()
         p0 = float(p0)
@@ -85,9 +86,11 @@ with open(settings.testsetpath) as f:
         img[1, :, :] -= meanImage[1, :, :].mean()
         img[2, :, :] -= meanImage[2, :, :].mean()
         inputs[0, counter % settings.stepSize, :, :, :] = img
+	labels[0, counter % settings.stepSize, :] = np.asarray(p0,p1,p2,p3,p4,p5,p6)
         counter += 1
         if counter % 3 == 0:
             out = model.predict(inputs)
+	   # print out
             posx = out[0]
             posq = out[1]
             print "actual:"
@@ -102,6 +105,7 @@ with open(settings.testsetpath) as f:
             posqs.append(theta)
             print 'errx ', errx, ' m and ', 'errq ', theta, ' degrees'
             inputs = np.zeros([1, 3, 3, 224, 224])
+	    labels = np.zeros([1, 3, 7])
 print 'median error', np.median(posxs), ' m and ', np.median(posqs), ' degrees'
 
     # poses.append((p0,p1,p2,p3,p4,p5,p6))
@@ -109,7 +113,7 @@ print 'median error', np.median(posxs), ' m and ', np.median(posqs), ' degrees'
 
     # imgs.append(img)
 # print len(imgs)
-# print np.asarray(imgs).shape
+# print 	np.asarray(imgs).shape
   # note: the model has three outputs
 # out = model.predict(np.expand_dims(np.asarray(imgs),axis=0))  # note: the model has three outputs
 # for i in range(len(out)):

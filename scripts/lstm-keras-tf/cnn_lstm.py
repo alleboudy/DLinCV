@@ -263,11 +263,11 @@ def create_cnn_lstm(weights_path=None):
 
     lstm1 = LSTM(64, return_sequences=True, input_shape=(settings.stepSize,128))(cls3_out)
 
-    lstm2 = LSTM(64)(lstm1)
+   # lstm2 = LSTM(64)(lstm1)
 
-    pose_xyz = Dense(3,name='pose_xyz',W_regularizer=l2(0.0002))(lstm2)
+    pose_xyz = TimeDistributed(Dense(3,name='pose_xyz',W_regularizer=l2(0.0002)))(lstm1)
 
-    pose_wpqr = Dense(4,name='pose_wpqr',W_regularizer=l2(0.0002))(lstm2)
+    pose_wpqr = TimeDistributed(Dense(4,name='pose_wpqr',W_regularizer=l2(0.0002)))(lstm1)
 
     cnn_lstm = Model(input=input, output=[pose_xyz,pose_wpqr])
     
