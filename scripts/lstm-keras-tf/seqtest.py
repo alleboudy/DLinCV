@@ -101,9 +101,9 @@ out = model.predict(inputs)  # note: the model has three outputs
 # print np.argmax(out[2])
 print out
 #print "predcited:"
-#posx = out[2]
-#posq = out[5]
-'''print "actual:"
+posx = out[0]
+posq = out[1]
+print "actual:"
 actualx = (p0, p1, p2)
 actualq = (p3, p4, p5, p6)
 q1 = actualq / np.linalg.norm(actualq)
@@ -115,4 +115,4 @@ posxs.append(errx)
 posqs.append(theta)
 print 'errx ', errx, ' m and ', 'errq ', theta, ' degrees'
 print 'median error', np.median(posxs), ' m and ', np.median(posqs), ' degrees'
-'''
+
