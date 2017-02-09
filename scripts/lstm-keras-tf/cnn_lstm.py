@@ -246,7 +246,8 @@ def create_cnn_lstm(weights_path=None):
 
     cls3_fc1 = TimeDistributed(Dropout(0.5))(cls3_fc1_pose)
 
-    cls3_out = TimeDistributed(Dense(128,name='cls3_out',W_regularizer=l2(0.0002)))(cls3_fc1)
+    cls3_out = TimeDistributed(Dense(1024,activation='relu',name='cls3_out',W_regularizer=l2(0.0002)))(cls3_fc1)
+    cls3_fc2 = TimeDistributed(Dropout(0.5))(cls3_out)
 
 #    cls3_fc_pose_xyz = TimeDistributed(Dense(3,name='cls3_fc_pose_xyz',W_regularizer=l2(0.0002)))(cls3_fc1)
 
@@ -261,13 +262,14 @@ def create_cnn_lstm(weights_path=None):
     
 #    googlenet = Model(input=input, output=[loss1_classifier_act,loss2_classifier_act,loss3_classifier_act])
 
-    lstm1 = LSTM(64, return_sequences=True, input_shape=(settings.stepSize,128))(cls3_out)
+    lstm = LSTM(512 ,return_sequences=True, input_shape=(settings.stepSize,1024))(cls3_fc2)
+    lstm1 = LSTM(128 ,return_sequences=False, input_shape=(settings.stepSize,512))(lstm)
 
    # lstm2 = LSTM(64)(lstm1)
 
-    pose_xyz = TimeDistributed(Dense(3,name='pose_xyz',W_regularizer=l2(0.0002)))(lstm1)
+    pose_xyz = (Dense(3,name='pose_xyz',W_regularizer=l2(0.0002)))(lstm1)
 
-    pose_wpqr = TimeDistributed(Dense(4,name='pose_wpqr',W_regularizer=l2(0.0002)))(lstm1)
+    pose_wpqr = (Dense(4,name='pose_wpqr',W_regularizer=l2(0.0002)))(lstm1)
 
     cnn_lstm = Model(input=input, output=[pose_xyz,pose_wpqr])
     
