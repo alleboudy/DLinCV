@@ -98,7 +98,8 @@ def gen_data(source):
             pose_q_left = source[1][1][max(0, i - 1)]
             pose_x_right = source[1][0][min(i + 1, len(source[0]) - 1)]
             pose_q_right = source[1][1][min(i + 1, len(source[0]) - 1)]
-            yield np.asarray([image_left, image, image_right]), np.asarray([pose_x, pose_x_left, pose_x_right]), np.asarray([pose_q, pose_q_left, pose_q_right])
+            yield np.asarray([image_left, image, image_right]), pose_x_right,pose_q_right
+            #np.asarray([pose_x, pose_x_left, pose_x_right]), np.asarray([pose_q, pose_q_left, pose_q_right])
 
 
 def gen_data_batch(source):
