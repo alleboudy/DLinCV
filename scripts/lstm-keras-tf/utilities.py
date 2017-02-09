@@ -112,4 +112,4 @@ def gen_data_batch(source):
             image_batch.append(image)
             pose_x_batch.append(pose_x)
             pose_q_batch.append(pose_q)
-        yield np.asarray(image_batch), [np.array(pose_x_batch), np.array(pose_q_batch)]
+        yield np.asarray(image_batch), [np.asarray(pose_x_batch), np.asarray(pose_q_batch)]
