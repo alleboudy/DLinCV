@@ -263,13 +263,13 @@ def create_cnn_lstm(weights_path=None):
 #    googlenet = Model(input=input, output=[loss1_classifier_act,loss2_classifier_act,loss3_classifier_act])
 
     lstm = LSTM(512 ,return_sequences=True, input_shape=(settings.stepSize,1024))(cls3_fc2)
-    lstm1 = LSTM(128 ,return_sequences=False, input_shape=(settings.stepSize,512))(lstm)
+    lstm1 = LSTM(128 ,return_sequences=True, input_shape=(settings.stepSize,512))(lstm)
 
    # lstm2 = LSTM(64)(lstm1)
 
-    pose_xyz = (Dense(3,name='pose_xyz',W_regularizer=l2(0.0002)))(lstm1)
+    pose_xyz = TimeDistributed(Dense(3,name='pose_xyz',W_regularizer=l2(0.0002)))(lstm1)
 
-    pose_wpqr = (Dense(4,name='pose_wpqr',W_regularizer=l2(0.0002)))(lstm1)
+    pose_wpqr = TimeDistributed(Dense(4,name='pose_wpqr',W_regularizer=l2(0.0002)))(lstm1)
 
     cnn_lstm = Model(input=input, output=[pose_xyz,pose_wpqr])
     

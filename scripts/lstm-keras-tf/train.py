@@ -62,8 +62,10 @@ for i in range(nb_epochs):
 	print Y_batch[0].shape
 	print Y_batch[1].shape
 	print len(Y_batch)	
-	history = model.fit(X_batch,{'pose_wpqr': Y_batch[1], 'pose_xyz': Y_batch[0]},
+	history = model.fit(X_batch,Y_batch,
           nb_epoch=1,batch_size=utilities.batchSize)
+	#history = model.fit(X_batch,{'pose_wpqr': Y_batch[1], 'pose_xyz': Y_batch[0]},
+     #     nb_epoch=1,batch_size=utilities.batchSize)
 	print 'epoch: ', i
 	print 'loss: ',history.history['loss'][0]
 	with open(historyloglocation,"a+") as f:
