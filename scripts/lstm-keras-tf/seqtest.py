@@ -68,7 +68,7 @@ seq = [
 counter = 0
 with open(settings.testsetpath) as f:
     inputs = np.zeros([1, 3, 3, 224, 224])
-    labels = np.zeros([1, 3, 7])
+    labels = np.zeros([1,3, 7])
     for line in f:
         fname, p0, p1, p2, p3, p4, p5, p6 = line.split()
         p0 = float(p0)
@@ -86,16 +86,17 @@ with open(settings.testsetpath) as f:
         img[1, :, :] -= meanImage[1, :, :].mean()
         img[2, :, :] -= meanImage[2, :, :].mean()
         inputs[0, counter % settings.stepSize, :, :, :] = img
-	labels[0, counter % settings.stepSize, :] = np.asarray(p0,p1,p2,p3,p4,p5,p6)
+	labels[:,counter % settings.stepSize, :] = np.asarray((p0,p1,p2,p3,p4,p5,p6))
         counter += 1
         if counter % 3 == 0:
             out = model.predict(inputs)
 	   # print out
-            posx = out[0]
-            posq = out[1]
+	    print out[0].shape
+            posx = out[0][0]
+            posq = out[1][0]
             print "actual:"
-            actualx = (p0, p1, p2)
-            actualq = (p3, p4, p5, p6)
+            actualx = labels[:,2,:3]
+            actualq = labels[:,2,3:7]
             q1 = actualq / np.linalg.norm(actualq)
             q2 = posq / np.linalg.norm(posq)
             d = abs(np.sum(np.multiply(q1, q2)))
