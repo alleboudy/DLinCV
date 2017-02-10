@@ -77,8 +77,8 @@ def get_data():
             #img[:, :, [0, 1, 2]] = img[:, :, [2, 1, 0]]
 #                    img = np.expand_dims(img, axis=0)
             imagesBatch.append(img)
-            po1.append(np.array((p0, p1, p2)))
-            po2.append(np.array((p3, p4, p5, p6)))
+            po1.append(np.array((np.float(p0),np.float( p1), np.float(p2))))
+            po2.append(np.array((np.float(p3),np.float( p4),np.float( p5), np.float(p6))))
 
 
 #		print po1.shape,p2.shape
@@ -99,7 +99,11 @@ def gen_data(source):
             pose_q_left = source[1][1][max(0, i - 1)]
             pose_x_right = source[1][0][min(i + 1, len(source[0]) - 1)]
             pose_q_right = source[1][1][min(i + 1, len(source[0]) - 1)]
-            m1_2,a1_2 = getError(pose_x,pose_q,pose_x_left,pose_q_left)
+           # print type(pose_x)
+	   # print pose_x
+            #print pose_q
+	    #print pose_x_left
+	    m1_2,a1_2 = getError(pose_x,pose_q,pose_x_left,pose_q_left)
             m2_3,a2_3 = getError(pose_x,pose_q,pose_x_right,pose_q_right)
             m1_3,a1_3 = getError(pose_x_left,pose_q_left,pose_x_right,pose_q_right)
             
