@@ -3,6 +3,7 @@ import numpy as np
 import cv2
 import random
 import settings
+from similarityMeasures import getError
 directory = settings.directory
 # "/usr/prakt/w065/posenet/OldHospital/"
 dataset = 'dataset_train.txt'
@@ -98,6 +99,14 @@ def gen_data(source):
             pose_q_left = source[1][1][max(0, i - 1)]
             pose_x_right = source[1][0][min(i + 1, len(source[0]) - 1)]
             pose_q_right = source[1][1][min(i + 1, len(source[0]) - 1)]
+            m1_2,a1_2 = getError(pose_x,pose_q,pose_x_left,pose_q_left)
+            m2_3,a2_3 = getError(pose_x,pose_q,pose_x_right,pose_q_right)
+            m1_3,a1_3 = getError(pose_x_left,pose_q_left,pose_x_right,pose_q_right)
+            
+            if m1_2 >settings.distanceThreshold or m2_3 >settings.distanceThreshold: 
+                continue
+            if a1_2 >settings.angleThreshold or a2_3 >settings.angleThreshold: 
+                continue
             yield np.asarray([image_left, image, image_right]), np.asarray([pose_x, pose_x_left, pose_x_right]), np.asarray([pose_q, pose_q_left, pose_q_right])
             #, pose_x_right,pose_q_right
 

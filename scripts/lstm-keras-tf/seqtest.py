@@ -11,7 +11,7 @@ import cv2
 import utilities
 from LRN2D import LRN2D as LRN
 import settings
-import similarityMeasures as mesures
+from similarityMeasures import getError
 directory = settings.directory  # "/usr/prakt/w065/posenet/sm/"
 
 dataset = 'dataset_test.txt'
@@ -64,13 +64,6 @@ howmanyaccepted=0
 
 counter = 0
 
-def getError(posx,posq,actualx,actualq):
-    q1 = actualq / np.linalg.norm(actualq)
-    q2 = posq / np.linalg.norm(posq)
-    d = abs(np.sum(np.multiply(q1, q2)))
-    theta = 2 * np.arccos(d) * 180 / np.pi
-    errx = np.linalg.norm(actualx - posx)
-    return errx, theta
 
 with open(settings.testsetpath) as f:
     inputs = np.zeros([1, 3, 3, 224, 224])
