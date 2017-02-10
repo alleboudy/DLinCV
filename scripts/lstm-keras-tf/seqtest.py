@@ -63,6 +63,15 @@ imgs = []
 howmanyaccepted=0
 
 counter = 0
+
+def getError(posx,posq,actualx,actualq):
+    q1 = actualq / np.linalg.norm(actualq)
+    q2 = posq / np.linalg.norm(posq)
+    d = abs(np.sum(np.multiply(q1, q2)))
+    theta = 2 * np.arccos(d) * 180 / np.pi
+    errx = np.linalg.norm(actualx - posx)
+    return errx, theta
+
 with open(settings.testsetpath) as f:
     inputs = np.zeros([1, 3, 3, 224, 224])
     labels = np.zeros([3, 7])
@@ -88,7 +97,13 @@ with open(settings.testsetpath) as f:
 	
         counter += 1
         if counter % 3 == 0:
-            if np.abs( mesures.euclidean_distance(labels[0][:3],labels[1][:3])) >settings.distanceThreshold or np.abs( mesures.euclidean_distance(labels[1][:3],labels[2][:3])) >settings.distanceThreshold:
+            m1_2,a1_2 = getError(labels[0][:3],labels[0][3:7],labels[1][:3],labels[1][3:7])
+            m2_3,a2_3 = getError(labels[1][:3],labels[1][3:7],labels[2][:3],labels[2][3:7])
+            m1_3,a1_3 = getError(labels[0][:3],labels[0][3:7],labels[2][:3],labels[2][3:7])
+            
+            if m1_2 >settings.distanceThreshold or m2_3 >settings.distanceThreshold: 
+                continue
+            if a1_2 >settings.angleThreshold or a2_3 >settings.angleThreshold: 
                 continue
             howmanyaccepted+=1
             out = model.predict(inputs)
@@ -97,14 +112,10 @@ with open(settings.testsetpath) as f:
 	    #print out
             posx = out[0][0].mean(0)#xyz
             posq = out[1][0].mean(0)#wpqr
-            print "actual:"
+            #print "actual:"
             actualx = labels[:,:3].mean(0)
             actualq = labels[:,3:7].mean(0)
-            q1 = actualq / np.linalg.norm(actualq)
-            q2 = posq / np.linalg.norm(posq)
-            d = abs(np.sum(np.multiply(q1, q2)))
-            theta = 2 * np.arccos(d) * 180 / np.pi
-            errx = np.linalg.norm(actualx - posx)
+            errx, theta = getError(posx,posq,actualx,actualq)
             posxs.append(errx)
             posqs.append(theta)
             print 'errx ', errx, ' m and ', 'errq ', theta, ' degrees'
