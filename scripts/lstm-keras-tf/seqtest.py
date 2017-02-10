@@ -11,6 +11,7 @@ import cv2
 import utilities
 from LRN2D import LRN2D as LRN
 import settings
+import similarityMeasures as mesures
 directory = settings.directory  # "/usr/prakt/w065/posenet/sm/"
 
 dataset = 'dataset_test.txt'
@@ -60,7 +61,7 @@ posxs = []
 posqs = []
 imgs = []
 howmanyaccepted=0
-similarityThreshold=settings.similarityThreshold
+
 counter = 0
 with open(settings.testsetpath) as f:
     inputs = np.zeros([1, 3, 3, 224, 224])
@@ -87,6 +88,9 @@ with open(settings.testsetpath) as f:
 	
         counter += 1
         if counter % 3 == 0:
+            if np.abs( mesures.euclidean_distance(labels[0][:3],labels[1][:3])) >settings.distanceThreshold or np.abs( mesures.euclidean_distance(labels[1][:3],labels[2][:3])) >settings.distanceThreshold:
+                continue
+            howmanyaccepted+=1
             out = model.predict(inputs)
 	   # print out
 	   # print out[0].shape #(1,3,3)
@@ -107,6 +111,8 @@ with open(settings.testsetpath) as f:
             inputs = np.zeros([1, 3, 3, 224, 224])
 	    labels = np.zeros([ 3, 7])
 print 'median error', np.median(posxs), ' m and ', np.median(posqs), ' degrees'
+print 'accepted test sequences: ',howmanyaccepted
+
 
     # poses.append((p0,p1,p2,p3,p4,p5,p6))
     # images.append(directory+fname)
