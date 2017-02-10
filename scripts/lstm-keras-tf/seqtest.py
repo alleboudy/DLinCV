@@ -92,11 +92,11 @@ with open(settings.testsetpath) as f:
             out = model.predict(inputs)
 	   # print out
 	    print out[0].shape
-            posx = out[0][0]
-            posq = out[1][0]
+            posx = out[0][0][0]
+            posq = out[1][0][0]
             print "actual:"
-            actualx = labels[:,2,:3]
-            actualq = labels[:,2,3:7]
+            actualx = labels[:,0,:3]
+            actualq = labels[:,0,3:7]
             q1 = actualq / np.linalg.norm(actualq)
             q2 = posq / np.linalg.norm(posq)
             d = abs(np.sum(np.multiply(q1, q2)))
