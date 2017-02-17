@@ -11,7 +11,7 @@ meanFile = settings.meanFile  # 'oldhospitaltrainmean.binaryproto'
 batchSize = settings.batchSize
 # resizes a given image so that the smallest dimension is 256 then crops
 # 244X244 from the middle of it
-
+#samplesCounter=0
 
 def ResizeCropImage(image):
     # we need to keep in mind aspect ratio so the image does
@@ -111,6 +111,9 @@ def gen_data(source):
                 continue
             if a1_2 >settings.angleThreshold or a2_3 >settings.angleThreshold: 
                 continue
+	    #global samplesCounter
+	    #samplesCounter+=1
+	    #print samplesCounter
             yield np.asarray([image_left, image, image_right]), np.asarray([pose_x, pose_x_left, pose_x_right]), np.asarray([pose_q, pose_q_left, pose_q_right])
             #, pose_x_right,pose_q_right
 

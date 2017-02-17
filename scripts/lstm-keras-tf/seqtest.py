@@ -14,7 +14,7 @@ import settings
 from similarityMeasures import getError
 directory = settings.directory  # "/usr/prakt/w065/posenet/sm/"
 
-dataset = 'dataset_test.txt'
+
 #outputDirectory = "/usr/prakt/w065/posenet/TFData/"
 #meanFileLocation = 'smmean.binaryproto'
 # 'tfsmtrainedweights.h5'#'75batbhessmtrainedweights.h5'#'smtrainedweights.h5'
@@ -95,9 +95,11 @@ with open(settings.testsetpath) as f:
             m1_3,a1_3 = getError(labels[0][:3],labels[0][3:7],labels[2][:3],labels[2][3:7])
             
             if m1_2 >settings.distanceThreshold or m2_3 >settings.distanceThreshold: 
+		print m1_2,m2_3
                 continue
             if a1_2 >settings.angleThreshold or a2_3 >settings.angleThreshold: 
-                continue
+                print a1_2,a2_3
+		continue
             howmanyaccepted+=1
             out = model.predict(inputs)
 	   # print out
