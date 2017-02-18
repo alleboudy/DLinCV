@@ -10,12 +10,12 @@ import caffe
 import cv2
 import utilities
 from LRN2D import LRN2D as LRN
-directory = "/usr/prakt/w065/posenet/sm/"
+directory = "/usr/prakt/w065/kc/"
 
 dataset = 'dataset_test.txt'
 outputDirectory = "/usr/prakt/w065/posenet/TFData/"
 meanFileLocation = 'smmean.binaryproto'
-weightsfile='tfsmtrainedweights.h5'#'75batbhessmtrainedweights.h5'#'smtrainedweights.h5'
+weightsfile='kc.h5'#'75batbhessmtrainedweights.h5'#'smtrainedweights.h5'
 #weightsfile='shoptrainedweights.h5'
 poses = [] #will contain poses followed by qs
 images = []
