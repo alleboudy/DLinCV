@@ -59,9 +59,9 @@ for i in range(nb_epochs):
 	X_batch, Y_batch = next(data_gen)
 		#model.train(X_batch,Y_batch)
 		#history = model.fit(X_batch, Y_batch,batch_size=32,shuffle=True,nb_epoch=1)
-	print Y_batch[0].shape
-	print Y_batch[1].shape
-	print len(Y_batch)	
+	#print Y_batch[0].shape
+	#print Y_batch[1].shape
+	#print len(Y_batch)	
 	history = model.fit(X_batch,Y_batch,
           nb_epoch=1,batch_size=utilities.batchSize)
 	#history = model.fit(X_batch,{'pose_wpqr': Y_batch[1], 'pose_xyz': Y_batch[0]},
