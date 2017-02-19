@@ -59,7 +59,7 @@ def get_data(dataset=data):
    # print 'lol1'
     # while(True):
     # print'lol2'
-    with open(directory + dataset) as f:
+    with open( dataset) as f:
         print 'reading training data'
         next(f)  # skip the 3 header lines
         next(f)

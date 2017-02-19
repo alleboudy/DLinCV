@@ -18,7 +18,7 @@ datagen = utilities.limited_gen_data(datasource)
 #outputDirectory = "/usr/prakt/w065/posenet/TFData/"
 #meanFileLocation = 'smmean.binaryproto'
 # 'tfsmtrainedweights.h5'#'75batbhessmtrainedweights.h5'#'smtrainedweights.h5'
-weightsfile = settings.outputWeightspath
+weightsfile = settings.testweights
 # weightsfile='shoptrainedweights.h5'
 #poses = []  # will contain poses followed by qs
 #images = []
