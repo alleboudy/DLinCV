@@ -1,5 +1,5 @@
-inputFilePath='dataset_train.txt'
-outputFilePath = 'myfile.txt'
+inputFilePath='chess_train.txt'
+outputFilePath = 'CHorderedset.txt'
 
 data = open(inputFilePath)
 data.readline()

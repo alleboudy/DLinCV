@@ -51,7 +51,7 @@ model.compile(optimizer=sgd, loss=[pose_loss3,rotation_loss3])
 
 #for e in range(nb_epoch):
 #print("epoch %d" % e)
-datasource = utilities.get_data()
+datasource = utilities.get_data(settings.traindata)
 
 data_gen = utilities.gen_data_batch(datasource)
 for i in range(nb_epochs):
