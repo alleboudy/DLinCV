@@ -9,13 +9,14 @@ from custom_layers import PoolHelper#,LRN
 import caffe
 import cv2
 import utilities
+import settings
 from LRN2D import LRN2D as LRN
-directory = "/usr/prakt/w065/kc/"
+directory = settings.directory#"/usr/prakt/w065/kc/"
 
 dataset =settings.testdata #'dataset_test.txt'
 outputDirectory = "/usr/prakt/w065/posenet/TFData/"
-meanFileLocation = 'smmean.binaryproto'
-weightsfile='kc.h5'#'75batbhessmtrainedweights.h5'#'smtrainedweights.h5'
+meanFileLocation =settings.meanFile #'smmean.binaryproto'
+weightsfile=settings.testweights#'kc.h5'#'75batbhessmtrainedweights.h5'#'smtrainedweights.h5'
 #weightsfile='shoptrainedweights.h5'
 poses = [] #will contain poses followed by qs
 images = []

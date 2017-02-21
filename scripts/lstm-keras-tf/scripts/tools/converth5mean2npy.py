@@ -1,9 +1,9 @@
 import caffe
 import numpy as np
 import sys
-outfilename='chmeans.npy'
+outfilename='../../meanFiles/npy/gc.npy'
 
-binaryproto='/usr/prakt/w065/chess/chmean.binaryproto'
+binaryproto='/usr/prakt/w065/DLinCV/scripts/keras-posenet/meanFiles/binaryproto/gc.binaryproto'
 def getMean(meanFileLocation):
     blob = caffe.proto.caffe_pb2.BlobProto()
     data = open(meanFileLocation, 'rb').read()

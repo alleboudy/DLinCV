@@ -1,5 +1,5 @@
-inputFilePath='chess_train.txt'
-outputFilePath = 'CHorderedset.txt'
+inputFilePath='/usr/prakt/w065/oh/dataset_test.txt'
+outputFilePath = '/usr/prakt/w065/DLinCV/scripts/lstm-keras-tf/orderedSets/ohoporderedtestset.txt'
 
 data = open(inputFilePath)
 data.readline()
