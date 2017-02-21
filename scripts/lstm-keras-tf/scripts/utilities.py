@@ -70,6 +70,8 @@ def get_data(dataset=data):
         # print 'lol3'
 
         for line in f:
+	    if line.isspace():
+		continue 
             fname, p0, p1, p2, p3, p4, p5, p6 = line.split()
             img = ResizeCropImage(cv2.imread(
                 directory + fname)).astype(np.float32)

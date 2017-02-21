@@ -4,7 +4,7 @@ import cv2
 import random
 import settings
 directory = settings.directory# "/usr/prakt/w065/posenet/OldHospital/"
-dataset = 'dataset_train.txt'
+dataset =settings.traindata #'dataset_train.txt'
 meanFile = settings.meanFile #'oldhospitaltrainmean.binaryproto'
 batchSize=settings.batchSize
 #resizes a given image so that the smallest dimension is 256 then crops 244X244 from the middle of it
@@ -57,6 +57,8 @@ def get_data():
 		#print 'lol3'	
 	  
 		for line in f:
+		    if line.isspace():
+			continue
                     fname, p0,p1,p2,p3,p4,p5,p6 = line.split()
                     img = ResizeCropImage(cv2.imread(directory+fname )).astype(np.float32)
                     img = img.transpose((2, 0, 1))

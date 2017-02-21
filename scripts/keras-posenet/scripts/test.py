@@ -12,7 +12,7 @@ import utilities
 from LRN2D import LRN2D as LRN
 directory = "/usr/prakt/w065/kc/"
 
-dataset = 'dataset_test.txt'
+dataset =settings.testdata #'dataset_test.txt'
 outputDirectory = "/usr/prakt/w065/posenet/TFData/"
 meanFileLocation = 'smmean.binaryproto'
 weightsfile='kc.h5'#'75batbhessmtrainedweights.h5'#'smtrainedweights.h5'
@@ -64,6 +64,8 @@ with open(directory+dataset) as f:
     next(f)
     next(f)
     for line in f:
+	if line.isspace():
+		continue
         #if limitingCounter ==0:
         #   break
 	#limitingCounter-=1
