@@ -66,13 +66,15 @@ for i in range(nb_epochs):
           nb_epoch=1,batch_size=utilities.batchSize)
 	#history = model.fit(X_batch,{'pose_wpqr': Y_batch[1], 'pose_xyz': Y_batch[0]},
      #     nb_epoch=1,batch_size=utilities.batchSize)
+	print settings.logprefix
 	print 'epoch: ', i
 	print 'loss: ',history.history['loss'][0]
 	with open(historyloglocation,"a+") as f:
                 f.write('{},{}\n'.format(str(i), str(history.history['loss'][0])))
 
 	if i%25==0:
-		print 'saved trained weights'
+		print 'saving trained weights in'
+		print outputWeightspath
 		model.save_weights(outputWeightspath)
 
 

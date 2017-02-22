@@ -7,7 +7,7 @@ from similarityMeasures import getError
 directory = settings.directory
 # "/usr/prakt/w065/posenet/OldHospital/"
 data = settings.traindata  # 'KCorderedtrain.txt'
-print data
+#print data
 meanFile = settings.meanFile  # 'oldhospitaltrainmean.binaryproto'
 batchSize = settings.batchSize
 # resizes a given image so that the smallest dimension is 256 then crops
@@ -62,7 +62,7 @@ def get_data(dataset=data):
     # print'lol2'
     print dataset
     with open( dataset) as f:
-        print 'reading training data'
+        print 'preparing data'
         next(f)  # skip the 3 header lines
         next(f)
         next(f)

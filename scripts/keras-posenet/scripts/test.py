@@ -22,12 +22,12 @@ poses = [] #will contain poses followed by qs
 images = []
 
 #limitingCounter=3
-def getMean():
-    blob = caffe.proto.caffe_pb2.BlobProto()
-    data = open( meanFileLocation, 'rb' ).read()
-    blob.ParseFromString(data)
-    arr = np.array( caffe.io.blobproto_to_array(blob) )
-    return arr[0]
+#def getMean():
+#    blob = caffe.proto.caffe_pb2.BlobProto()
+#    data = open( meanFileLocation, 'rb' ).read()
+#    blob.ParseFromString(data)
+#    arr = np.array( caffe.io.blobproto_to_array(blob) )
+#    return arr[0]
 
 
 
@@ -48,7 +48,7 @@ def getMean():
     #cv2.imshow("resized", resized)
     #cv2.waitKey(0)
 
-meanImage = getMean()
+meanImage = utilities.getMean(settings.meanFile)
 #print meanImage.shape 
          # Test pretrained model
 model = posenet.create_posenet(weightsfile)

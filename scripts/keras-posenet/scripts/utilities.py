@@ -1,5 +1,5 @@
 import numpy as np
-import caffe
+#import caffe
 import cv2
 import random
 import settings
@@ -29,12 +29,12 @@ def ResizeCropImage(image):
     #cv2.waitKey(0)
 
 #extracts the mean image form a given mean file
-def getMean(meanFileLocation = 'imagemean.binaryproto'):
-    blob = caffe.proto.caffe_pb2.BlobProto()
-    data = open( meanFileLocation, 'rb' ).read()
-    blob.ParseFromString(data)
-    arr = np.array( caffe.io.blobproto_to_array(blob) )
-    return arr[0]
+def getMean(meanFile):
+    #blob = caffe.proto.caffe_pb2.BlobProto()
+    #data = open( meanFileLocation, 'rb' ).read()
+    #blob.ParseFromString(data)
+    #arr = np.array( caffe.io.blobproto_to_array(blob) )
+    return np.load(meanFile) #arr[0]
 
 #outputs two lists of numpy arrays
 meanImage =getMean(meanFile)
@@ -49,7 +49,7 @@ def get_data():
     #while(True):
 	#print'lol2'
 	with open(directory+dataset) as f:
-	   	print 'opened file' 
+	   	print 'preparing data ...' 
           	next(f)  # skip the 3 header lines
            	next(f)
            	next(f)
