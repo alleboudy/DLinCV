@@ -1,5 +1,5 @@
-inputFilePath='/usr/prakt/w065/oh/dataset_test.txt'
-outputFilePath = '/usr/prakt/w065/DLinCV/scripts/lstm-keras-tf/orderedSets/ohoporderedtestset.txt'
+inputFilePath='/usr/prakt/w065/stairs/dataset_test.txt'
+outputFilePath = '/usr/prakt/w065/DLinCV/scripts/lstm-keras-tf/orderedSets/stairsorderedset.txt'
 
 data = open(inputFilePath)
 data.readline()
@@ -10,5 +10,6 @@ lines = sorted(lines)
 data.close()
 f = open(outputFilePath, 'w')
 for l in lines:
-    f.write("%s\n" % l)
+    #if "color" in l:
+        f.write("%s\n" % l)
 f.close()  
