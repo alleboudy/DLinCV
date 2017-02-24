@@ -1,5 +1,9 @@
-inputFilePath='/usr/prakt/w065/stairs/dataset_test.txt'
-outputFilePath = '/usr/prakt/w065/DLinCV/scripts/lstm-keras-tf/orderedSets/stairsorderedset.txt'
+pre='office'
+s3t='test'
+
+
+inputFilePath='/usr/prakt/w065/'+pre+'/dataset_'+s3t+'.txt'
+outputFilePath = '/usr/prakt/w065/DLinCV/scripts/lstm-keras-tf/orderedSets/'+pre+'orderedset_'+s3t+'.txt'
 
 data = open(inputFilePath)
 data.readline()
