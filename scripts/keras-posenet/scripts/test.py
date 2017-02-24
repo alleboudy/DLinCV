@@ -6,7 +6,7 @@ from keras.models import Model
 from keras.regularizers import l2
 from keras.optimizers import SGD
 from custom_layers import PoolHelper#,LRN
-import caffe
+#import caffe
 import cv2
 import utilities
 import settings
