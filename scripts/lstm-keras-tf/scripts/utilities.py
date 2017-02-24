@@ -7,7 +7,7 @@ from similarityMeasures import getError
 directory = settings.directory
 # "/usr/prakt/w065/posenet/OldHospital/"
 data = settings.traindata  # 'KCorderedtrain.txt'
-#print data
+# print data
 meanFile = settings.meanFile  # 'oldhospitaltrainmean.binaryproto'
 batchSize = settings.batchSize
 # resizes a given image so that the smallest dimension is 256 then crops
@@ -46,12 +46,30 @@ def getMean():
     return np.load(meanFile)
     # return #arr[0]
 
-# outputs two lists of numpy arrays
-meanImage = getMean()
+
+
+
+def subtract_mean(images):
+
+    mean = np.zeros((3, 224, 224))
+    mean[0, :, :] = images[0, :, :].mean()
+    mean[1, :, :] = images[1, :, :].mean()
+    mean[2, :, :] = images[2, :, :].mean()
+    old_mean_image = getMean()
+    print "old mean vs new mean!"
+    print old_mean_image==mean
+    ready_images = []
+    for img in images:
+        img[0, :, :] -= mean[0]
+        img[1, :, :] -= mean[1]
+        img[2, :, :] -= mean[2]
+        ready_images.append(img)
+
+    return np.asarray(ready_images)
 
 
 def get_data(dataset=data):
-    imagesBatch = []
+    images_batch = []
     po1 = []
     po2 = []
     # print 'in batch generator'
@@ -61,7 +79,7 @@ def get_data(dataset=data):
     # while(True):
     # print'lol2'
     print dataset
-    with open( dataset) as f:
+    with open(dataset) as f:
         print 'preparing data'
         next(f)  # skip the 3 header lines
         next(f)
@@ -70,31 +88,31 @@ def get_data(dataset=data):
         # print 'lol3'
 
         for line in f:
-	    if line.isspace():
-		continue 
+            if line.isspace():
+                continue
             fname, p0, p1, p2, p3, p4, p5, p6 = line.split()
             img = ResizeCropImage(cv2.imread(
                 directory + fname)).astype(np.float32)
             img = img.transpose((2, 0, 1))
-            img[0, :, :] -= meanImage[0, :, :].mean()
-            img[1, :, :] -= meanImage[1, :, :].mean()
-            img[2, :, :] -= meanImage[2, :, :].mean()
+            #img[0, :, :] -= meanImage[0, :, :].mean()
+            #img[1, :, :] -= meanImage[1, :, :].mean()
+            #img[2, :, :] -= meanImage[2, :, :].mean()
             #img[:, :, [0, 1, 2]] = img[:, :, [2, 1, 0]]
 #                    img = np.expand_dims(img, axis=0)
-            imagesBatch.append(img)
+            images_batch.append(img)
             po1.append(np.array((np.float(p0), np.float(p1), np.float(p2))))
             po2.append(
                 np.array((np.float(p3), np.float(p4), np.float(p5), np.float(p6))))
 
-
+    ready_imgs = subtract_mean(np.asarray(images_batch))
 #		print po1.shape,p2.shape
-    return (np.asarray(imagesBatch), [np.asarray(po1), np.asarray(po2)])
+    return (ready_imgs, [np.asarray(po1), np.asarray(po2)])
 
 
 def limited_gen_data(source):
     # while True:
     indices = range(len(source[0]))
-    #random.shuffle(indices)
+    # random.shuffle(indices)
     for i in indices:
         image = source[0][i]
         image_left = source[0][max(0, i - 1)]
