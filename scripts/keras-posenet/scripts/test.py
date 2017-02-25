@@ -21,6 +21,21 @@ weightsfile=settings.testweights#'kc.h5'#'75batbhessmtrainedweights.h5'#'smtrain
 poses = [] #will contain poses followed by qs
 images = []
 
+
+
+
+# extracts the mean image form a given mean file
+def getMean(meanFile):
+    #blob = caffe.proto.caffe_pb2.BlobProto()
+    #data = open( meanFileLocation, 'rb' ).read()
+    # blob.ParseFromString(data)
+    #arr = np.array( caffe.io.blobproto_to_array(blob) )
+        return np.load(meanFile) #arr[0]
+
+# outputs two lists of numpy arrays
+#meanImage =getMean(meanFile)
+
+
 #limitingCounter=3
 #def getMean():
 #    blob = caffe.proto.caffe_pb2.BlobProto()
@@ -48,7 +63,7 @@ images = []
     #cv2.imshow("resized", resized)
     #cv2.waitKey(0)
 
-meanImage = utilities.getMean(settings.meanFile)
+meanImage = getMean(settings.meanFile)
 #print meanImage.shape 
          # Test pretrained model
 model = posenet.create_posenet(weightsfile)
