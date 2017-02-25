@@ -38,31 +38,31 @@ def ResizeCropImage(image):
 # extracts the mean image form a given mean file
 
 
-def getMean():
+#def getMean():
     #blob = caffe.proto.caffe_pb2.BlobProto()
     #data = open( meanFileLocation, 'rb' ).read()
     # blob.ParseFromString(data)
     #arr = np.array( caffe.io.blobproto_to_array(blob) )
-    return np.load(meanFile)
+#    return np.load(meanFile)
     # return #arr[0]
 
 
 
 
 def subtract_mean(images):
-
+    print "applying mean"
     mean = np.zeros((3, 224, 224))
     mean[0, :, :] = images[0, :, :].mean()
     mean[1, :, :] = images[1, :, :].mean()
     mean[2, :, :] = images[2, :, :].mean()
-    old_mean_image = getMean()
-    print "old mean vs new mean!"
-    print old_mean_image==mean
+    #old_mean_image = getMean()
+   # print "old mean vs new mean!"
+   # print old_mean_image==mean
     ready_images = []
     for img in images:
-        img[0, :, :] -= mean[0]
-        img[1, :, :] -= mean[1]
-        img[2, :, :] -= mean[2]
+        img[0, :, :] -= mean[0,:,:]
+        img[1, :, :] -= mean[1,:,:]
+        img[2, :, :] -= mean[2,:,:]
         ready_images.append(img)
 
     return np.asarray(ready_images)
