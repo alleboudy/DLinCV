@@ -12,7 +12,7 @@ import utilities
 import settings
 from LRN2D import LRN2D as LRN
 directory = settings.directory#"/usr/prakt/w065/kc/"
-
+settings.saveMean=False
 dataset =settings.testdata #'dataset_test.txt'
 outputDirectory = "/usr/prakt/w065/posenet/TFData/"
 meanFileLocation =settings.meanFile #'smmean.binaryproto'
@@ -72,6 +72,7 @@ model.compile(optimizer=sgd, loss='categorical_crossentropy')
 #meantrasnformed = meanImage
 #meantrasnformed[:,:,[0,1,2]]  = meanImage[:,:,[2,1,0]]
 #meantrasnformed =  np.expand_dims(meantrasnformed, axis=0)
+totalImagesTested=0
 posxs=[]
 posqs=[]
 #meanout = model.predict(meantrasnformed)
@@ -98,9 +99,9 @@ with open(directory+dataset) as f:
         img = utilities.ResizeCropImage(imread(directory+fname )).astype(np.float32)
 
         img = img.transpose((2, 0, 1))
-        img[0,:, :] -= meanImage[0,:,:].mean()
-        img[1,:, :] -= meanImage[1,:,:].mean()
-        img[2,:, :] -= meanImage[2,:,:].mean()
+        img[0,:, :] -= meanImage[0,:,:]#.mean()
+        img[1,:, :] -= meanImage[1,:,:]#.mean()
+        img[2,:, :] -= meanImage[2,:,:]#.mean()
         #img[:,:,[0,1,2]] = img[:,:,[2,1,0]]
         img = np.expand_dims(img, axis=0)
         out = model.predict(img) # note: the model has three outputs
@@ -122,6 +123,8 @@ with open(directory+dataset) as f:
 	errx=np.linalg.norm(actualx-posx)
 	posxs.append(errx)
 	posqs.append(theta)
+	totalImagesTested+=1
 	print 'errx ', errx, ' m and ', 'errq ', theta,' degrees'
+	print 'total images so far:', totalImagesTested
 print 'median error',np.median(posxs), ' m and ', np.median(posqs), ' degrees'
-
+print 'total number of images:',totalImagesTested

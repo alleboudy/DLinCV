@@ -11,6 +11,7 @@ import settings
 outputWeightspath =settings.outputWeightspath #'oldhospitaltrainedweights.h5'
 BETA = settings.BETA #to 2000 for outdoor
 directory = settings.directory#"/usr/prakt/w065/posenet/OldHospital/"
+settings.saveMean=True
 #dataset = 'dataset_train.txt'
 #historyloglocation = '{}traininghistory_{}.txt'.format(directory,str(time.time()))
 historyloglocation = './losslogs/{}traininghistory_{}.txt'.format(settings.logprefix,str(time.time()))
@@ -51,6 +52,7 @@ model.compile(optimizer=sgd, loss=[pose_loss12,rotation_loss12,pose_loss12,rotat
 datasource = utilities.get_data()
 
 data_gen = utilities.gen_data_batch(datasource)
+print "beta=",BETA
 for i in range(nb_epochs):
 
 	X_batch, Y_batch = next(data_gen)

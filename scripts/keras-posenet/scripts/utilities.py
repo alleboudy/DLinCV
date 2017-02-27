@@ -44,19 +44,37 @@ def ResizeCropImage(image):
 
 
 def subtract_mean(images):
-
     mean = np.zeros((3, 224, 224))
-    mean[0, :, :] = images[0, :, :].mean()
-    mean[1, :, :] = images[1, :, :].mean()
-    mean[2, :, :] = images[2, :, :].mean()
+    if not settings.saveMean:#i.e test
+	mean = np.load(settings.meanFile)
+	print "mean loaded"	
+      
+   # mean = np.zeros((3, 224, 224))
+    else:
+	n=0
+	for img in images:
+		mean[0]+=img[0,:,:]
+    		mean[1]+=img[1,:,:]
+		mean[2]+=img[2,:,:]
+		n+=1
+	#mean[0, :, :] = images[0, :, :].mean()#.mean()
+    	#mean[1, :, :] = images[1, :, :].mean()#.mean()
+    	#mean[2, :, :] = images[2, :, :].mean()#.mean()
+	mean/=n
+	print "total images="
+	print n
+	np.save(settings.meanFile,mean)
+	print "mean saved"
+    print settings.meanFile
     #old_mean_image = getMean()
     #print "old mean vs new mean!"
     #print old_mean_image == mean
     ready_images = []
     for img in images:
-        img[0, :, :] -= mean[0,:,:]
-        img[1, :, :] -= mean[1,:,:]
-        img[2, :, :] -= mean[2,:,:]
+	img-=mean
+        #img[0, :, :] -= mean[0,:,:].mean()
+        #img[1, :, :] -= mean[1,:,:].mean()
+        #img[2, :, :] -= mean[2,:,:].mean()
         ready_images.append(img)
 
     return np.asarray(ready_images)

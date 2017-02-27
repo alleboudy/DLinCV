@@ -15,6 +15,7 @@ from similarityMeasures import getError
 directory = settings.directory  # "/usr/prakt/w065/posenet/sm/"
 datasource = utilities.get_data(settings.testsetpath)
 datagen = utilities.limited_gen_data(datasource)
+settings.saveMean=False
 #outputDirectory = "/usr/prakt/w065/posenet/TFData/"
 #meanFileLocation = 'smmean.binaryproto'
 # 'tfsmtrainedweights.h5'#'75batbhessmtrainedweights.h5'#'smtrainedweights.h5'

@@ -1,5 +1,5 @@
-pre='office'
-s3t='test'
+pre='fire'
+s3t='train'
 
 
 inputFilePath='/usr/prakt/w065/'+pre+'/dataset_'+s3t+'.txt'

@@ -52,18 +52,34 @@ def ResizeCropImage(image):
 def subtract_mean(images):
     print "applying mean"
     mean = np.zeros((3, 224, 224))
-    mean[0, :, :] = images[0, :, :].mean()
-    mean[1, :, :] = images[1, :, :].mean()
-    mean[2, :, :] = images[2, :, :].mean()
+    if settings.saveMean:
+	n=0
+	for img in images:
+   		mean[0] += img[0, :, :]
+   		mean[1] += img[1, :, :]
+    		mean[2] += img[2, :, :]
+		n+=1
+	mean/=n
+	np.save(settings.meanFile,mean)
+	print "mean saved in:"
+#	print settings.meanFile
+    else:
+	mean=np.load(settings.meanFile)
+	print "mean loaded from:"
+    print settings.meanFile
     #old_mean_image = getMean()
    # print "old mean vs new mean!"
    # print old_mean_image==mean
     ready_images = []
     for img in images:
-        img[0, :, :] -= mean[0,:,:]
-        img[1, :, :] -= mean[1,:,:]
-        img[2, :, :] -= mean[2,:,:]
-        ready_images.append(img)
+#	print img.shape
+      if not settings.oldmean:
+        img-=mean
+      else:	
+	img[0, :, :] -= mean[0,:,:].mean()
+        img[1, :, :] -= mean[1,:,:].mean()
+        img[2, :, :] -= mean[2,:,:].mean()
+      ready_images.append(img)
 
     return np.asarray(ready_images)
 
@@ -127,15 +143,16 @@ def limited_gen_data(source):
        # print pose_x
         # print pose_q
         # print pose_x_left
-        m1_2, a1_2 = getError(pose_x, pose_q, pose_x_left, pose_q_left)
-        m2_3, a2_3 = getError(pose_x, pose_q, pose_x_right, pose_q_right)
-        m1_3, a1_3 = getError(pose_x_left, pose_q_left,
+	if settings.saveMean:
+        	m1_2, a1_2 = getError(pose_x, pose_q, pose_x_left, pose_q_left)
+        	m2_3, a2_3 = getError(pose_x, pose_q, pose_x_right, pose_q_right)
+        	m1_3, a1_3 = getError(pose_x_left, pose_q_left,
                               pose_x_right, pose_q_right)
 
-        if m1_2 > settings.distanceThreshold or m2_3 > settings.distanceThreshold:
-            continue
-        if a1_2 > settings.angleThreshold or a2_3 > settings.angleThreshold:
-            continue
+        	if m1_2 > settings.distanceThreshold or m2_3 > settings.distanceThreshold:
+            		continue
+        	if a1_2 > settings.angleThreshold or a2_3 > settings.angleThreshold:
+            		continue
         #global samplesCounter
         # samplesCounter+=1
         # print samplesCounter

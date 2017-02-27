@@ -12,6 +12,7 @@ import settings
 outputWeightspath =settings.outputWeightspath #'oldhospitaltrainedweights.h5'
 BETA = settings.BETA #to 2000 for outdoor
 directory = settings.directory#"/usr/prakt/w065/posenet/OldHospital/"
+settings.saveMean=True
 #dataset = 'dataset_train.txt'
 #historyloglocation = '{}traininghistory_{}.txt'.format(directory,str(time.time()))
 historyloglocation = '{}{}traininghistory_{}.csv'.format(directory,settings.logprefix,str(time.time()))
