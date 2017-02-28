@@ -272,9 +272,9 @@ def create_cnn_lstm(weights_path=None):
     
 #    googlenet = Model(input=input, output=[loss1_classifier_act,loss2_classifier_act,loss3_classifier_act])
 
-    lstm1 = LSTM(64 ,return_sequences=True, input_shape=(settings.stepSize,128))(cls5_fc2)
+    lstm1 = LSTM(64 ,return_sequences=True, input_shape=(settings.stepSize,128),dropout_W=0.5, dropout_U=0.5,W_regularizer=l2(0.0002),U_regularizer=l2(0.0002),b_regularizer=l2(0.0002))(cls5_fc2)
 
-    lstm2 = LSTM(64 ,return_sequences=True, input_shape=(settings.stepSize,128))(cls5_fc2)
+    lstm2 = LSTM(64 ,return_sequences=True, input_shape=(settings.stepSize,128),dropout_W=0.5, dropout_U=0.5,W_regularizer=l2(0.0002),U_regularizer=l2(0.0002),b_regularizer=l2(0.0002))(cls5_fc2)
     
    # lstm1 = LSTM(128 ,return_sequences=True, input_shape=(settings.stepSize,512))(lstm)
 
