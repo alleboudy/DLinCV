@@ -11,6 +11,7 @@ import time
 import settings
 outputWeightspath =settings.outputWeightspath #'oldhospitaltrainedweights.h5'
 BETA = settings.BETA #to 2000 for outdoor
+ALPHA=settings.ALPHA
 directory = settings.directory#"/usr/prakt/w065/posenet/OldHospital/"
 settings.saveMean=True
 #dataset = 'dataset_train.txt'
@@ -33,7 +34,7 @@ startweight= settings.startweight #'../mergedweights.h5'
 
 def pose_loss3(y_true, y_pred):
         print "####### IN THE POSE LOSS FUNCTION #####"
-        return K.sqrt(K.sum(K.square((y_pred - y_true))))
+        return ALPHA* K.sqrt(K.sum(K.square((y_pred - y_true))))
 
 def rotation_loss3(y_true, y_pred):
         print "####### IN THE ROTATION LOSS FUNCTION #####"

@@ -23,7 +23,7 @@ weightsfile = settings.testweights
 # weightsfile='shoptrainedweights.h5'
 #poses = []  # will contain poses followed by qs
 #images = []
-
+#settings.oldmean=True
 # limitingCounter=3
 # def getMean():
 #blob = caffe.proto.caffe_pb2.BlobProto()

@@ -74,8 +74,10 @@ def subtract_mean(images):
     for img in images:
 #	print img.shape
       if not settings.oldmean:
+	#print "new mean"
         img-=mean
-      else:	
+      else:
+	#print "old mean"	
 	img[0, :, :] -= mean[0,:,:].mean()
         img[1, :, :] -= mean[1,:,:].mean()
         img[2, :, :] -= mean[2,:,:].mean()
