@@ -1,5 +1,6 @@
 import numpy as np
-import posenet
+import NoReg_posenet as posenet
+#import posenet
 from scipy.misc import imread, imresize
 from keras.layers import Input, Dense, Convolution2D, MaxPooling2D, AveragePooling2D, ZeroPadding2D, Dropout, Flatten, merge, Reshape, Activation
 from keras.models import Model

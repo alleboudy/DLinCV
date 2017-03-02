@@ -1,10 +1,12 @@
 from scipy.misc import imread, imresize
 import numpy as np
 
-from keras.layers import Input, Dense, Convolution2D, MaxPooling2D, AveragePooling2D, ZeroPadding2D, Dropout, Flatten, merge, Reshape, Activation,BatchNormalization
+from keras.layers import Input, Dense, Convolution2D, MaxPooling2D, AveragePooling2D, ZeroPadding2D, Dropout, Flatten, merge, Reshape, Activation
 from keras.models import Model
 from keras.regularizers import l2
 from keras.optimizers import SGD
+from custom_layers import PoolHelper#,LRN
+from LRN2D import LRN2D as LRN
 
 def create_posenet(weights_path=None):
     # creates GoogLeNet a.k.a. Inception v1 (Szegedy, 2015)
@@ -12,21 +14,26 @@ def create_posenet(weights_path=None):
     input = Input(shape=(3, 224, 224))
     
     conv1_7x7_s2 = Convolution2D(64,7,7,subsample=(2,2),border_mode='same',activation='relu',name='conv1/7x7_s2',W_regularizer=l2(0.0002))(input)
-
     
-    pool1_3x3_s2 = MaxPooling2D(pool_size=(3,3),strides=(2,2),border_mode='same',name='pool1/3x3_s2')(conv1_7x7_s2)
+    conv1_zero_pad = ZeroPadding2D(padding=(1, 1))(conv1_7x7_s2)
     
-    pool1_norm1 = BatchNormalization(axis=3,name='xpool1/norm1')(pool1_3x3_s2)
+    pool1_helper = PoolHelper()(conv1_zero_pad)
+    
+    pool1_3x3_s2 = MaxPooling2D(pool_size=(3,3),strides=(2,2),border_mode='valid',name='pool1/3x3_s2')(pool1_helper)
+    
+    pool1_norm1 = LRN(name='pool1/norm1')(pool1_3x3_s2)
     
     conv2_3x3_reduce = Convolution2D(64,1,1,border_mode='same',activation='relu',name='conv2/3x3_reduce',W_regularizer=l2(0.0002))(pool1_norm1)
     
     conv2_3x3 = Convolution2D(192,3,3,border_mode='same',activation='relu',name='conv2/3x3',W_regularizer=l2(0.0002))(conv2_3x3_reduce)
     
-    conv2_norm2 = BatchNormalization(axis=3,name='xconv2/norm2')(conv2_3x3)
+    conv2_norm2 = LRN(name='conv2/norm2')(conv2_3x3)
     
+    conv2_zero_pad = ZeroPadding2D(padding=(1, 1))(conv2_norm2)
     
+    pool2_helper = PoolHelper()(conv2_zero_pad)
     
-    pool2_3x3_s2 = MaxPooling2D(pool_size=(3,3),strides=(2,2),border_mode='same',name='pool2/3x3_s2')(conv2_norm2)
+    pool2_3x3_s2 = MaxPooling2D(pool_size=(3,3),strides=(2,2),border_mode='valid',name='pool2/3x3_s2')(pool2_helper)
     
     
     inception_3a_1x1 = Convolution2D(64,1,1,border_mode='same',activation='relu',name='inception_3a/1x1',W_regularizer=l2(0.0002))(pool2_3x3_s2)
@@ -63,8 +70,11 @@ def create_posenet(weights_path=None):
     inception_3b_output = merge([inception_3b_1x1,inception_3b_3x3,inception_3b_5x5,inception_3b_pool_proj],mode='concat',concat_axis=1,name='inception_3b/output')
     
     
-  
-    pool3_3x3_s2 = MaxPooling2D(pool_size=(3,3),strides=(2,2),border_mode='same',name='pool3/3x3_s2')(inception_3b_output)
+    inception_3b_output_zero_pad = ZeroPadding2D(padding=(1, 1))(inception_3b_output)
+    
+    pool3_helper = PoolHelper()(inception_3b_output_zero_pad)
+    
+    pool3_3x3_s2 = MaxPooling2D(pool_size=(3,3),strides=(2,2),border_mode='valid',name='pool3/3x3_s2')(pool3_helper)
     
     
     inception_4a_1x1 = Convolution2D(192,1,1,border_mode='same',activation='relu',name='inception_4a/1x1',W_regularizer=l2(0.0002))(pool3_3x3_s2)
@@ -190,9 +200,11 @@ def create_posenet(weights_path=None):
     inception_4e_output = merge([inception_4e_1x1,inception_4e_3x3,inception_4e_5x5,inception_4e_pool_proj],mode='concat',concat_axis=1,name='inception_4e/output')
     
     
-  
+    inception_4e_output_zero_pad = ZeroPadding2D(padding=(1, 1))(inception_4e_output)
     
-    pool4_3x3_s2 = MaxPooling2D(pool_size=(3,3),strides=(2,2),border_mode='same',name='pool4/3x3_s2')(inception_4e_output)
+    pool4_helper = PoolHelper()(inception_4e_output_zero_pad)
+    
+    pool4_3x3_s2 = MaxPooling2D(pool_size=(3,3),strides=(2,2),border_mode='valid',name='pool4/3x3_s2')(pool4_helper)
     
     
     inception_5a_1x1 = Convolution2D(256,1,1,border_mode='same',activation='relu',name='inception_5a/1x1',W_regularizer=l2(0.0002))(pool4_3x3_s2)

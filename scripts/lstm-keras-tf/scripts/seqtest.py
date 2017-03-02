@@ -1,5 +1,5 @@
 import numpy as np
-import cnn_lstm
+import cnn_lstm_NEW as cnn_lstm
 from scipy.misc import imread, imresize
 from keras.layers import Input, Dense, Convolution2D, MaxPooling2D, AveragePooling2D, ZeroPadding2D, Dropout, Flatten, merge, Reshape, Activation
 from keras.models import Model

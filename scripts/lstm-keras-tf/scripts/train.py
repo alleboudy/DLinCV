@@ -1,6 +1,6 @@
 import utilities
 #import posenet
-import cnn_lstm
+import cnn_lstm_NEW as cnn_lstm
 import theano
 import numpy as np
 import keras

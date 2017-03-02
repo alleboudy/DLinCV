@@ -1,6 +1,7 @@
 import utilities
-import posenet
-import theano
+import NoReg_posenet as posenet
+#import posenet
+#import theano
 import numpy as np
 import keras
 from keras.optimizers import SGD
