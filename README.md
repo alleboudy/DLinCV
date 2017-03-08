@@ -1,4 +1,4 @@
-#We still need to add proper documentation before going public 
+#We still need to add a proper documentation before going public 
 
 a few words for now, as we just recently moved a couple of days ago from Gitlab:
 
