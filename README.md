@@ -9,6 +9,8 @@ Getting the code to work:
 download and unzip any of the datasets mentioned
 
 keras-posenet has a regular posenet implementation, inside scripts/posenet.py 
+
+
 lstm-keras-tf has a posenet+LSTM implementation, inside scripts/cnn_lstm.py
 
 
