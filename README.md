@@ -6,7 +6,7 @@ background and info:
 
 https://docs.google.com/document/d/1ONzDBbF_XzeLUWmEfqhhtGX54NulEClrApoE9stfGsM/edit?usp=sharing
 
-https://docs.google.com/presentation/d/1JoUyCv2KZjGTsuIV3v-UMdnsQctyD3cmlRtzQIXfSpQ/edit#slide=id.p4
+
 
 -------
 Getting the code to work:
