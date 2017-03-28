@@ -230,21 +230,21 @@ def create_cnn_lstm(weights_path=None):
     
     loss3_flat = TimeDistributed(Flatten())(pool5_7x7_s1)
 
-    cls3_fc1_pose = TimeDistributed(Dense(2048,activation='relu',name='cls3_fc1_pose',W_regularizer=l2(0.0002),init="normal"))(loss3_flat)
+    cls3_fc1_pose = TimeDistributed(Dense(1024,activation='relu',name='cls3_fc1_pose',W_regularizer=l2(0.0002),init="normal"))(loss3_flat)
 
     cls3_fc1 = TimeDistributed(Dropout(0.5))(cls3_fc1_pose)
 
-    cls3_out = TimeDistributed(Dense(1024,activation='relu',name='cls3_out',W_regularizer=l2(0.0002)))(cls3_fc1)
-    cls3_fc2 = TimeDistributed(Dropout(0.5))(cls3_out)
+    #cls3_out = TimeDistributed(Dense(1024,activation='relu',name='cls3_out',W_regularizer=l2(0.0002)))(cls3_fc1)
+    #cls3_fc2 = TimeDistributed(Dropout(0.5))(cls3_out)
 
 
 
 
-    cls4_out = TimeDistributed(Dense(512,activation='relu',name='cls4_out',W_regularizer=l2(0.0002)))(cls3_fc2)
-    cls4_fc2 = TimeDistributed(Dropout(0.5))(cls4_out)
+    #cls4_out = TimeDistributed(Dense(512,activation='relu',name='cls4_out',W_regularizer=l2(0.0002)))(cls3_fc2)
+    #cls4_fc2 = TimeDistributed(Dropout(0.5))(cls4_out)
 
-    cls5_out = TimeDistributed(Dense(128,activation='relu',name='cls5_out',W_regularizer=l2(0.0002)))(cls4_fc2)
-    cls5_fc2 = TimeDistributed(Dropout(0.5))(cls5_out)
+    #cls5_out = TimeDistributed(Dense(128,activation='relu',name='cls5_out',W_regularizer=l2(0.0002)))(cls4_fc2)
+    #cls5_fc2 = TimeDistributed(Dropout(0.5))(cls5_out)
 
 
 #    cls3_fc_pose_xyz = TimeDistributed(Dense(3,name='cls3_fc_pose_xyz',W_regularizer=l2(0.0002)))(cls3_fc1)
@@ -260,9 +260,10 @@ def create_cnn_lstm(weights_path=None):
     
 #    googlenet = Model(input=input, output=[loss1_classifier_act,loss2_classifier_act,loss3_classifier_act])
 
-    lstm1 = LSTM(64 ,return_sequences=True, input_shape=(settings.stepSize,128),dropout_W=0.5, dropout_U=0.5)(cls5_fc2)
+    lstm1 = LSTM(64 ,return_sequences=True, input_shape=(settings.stepSize,1024),dropout_W=0.5, dropout_U=0.5)(cls3_fc1)
 
-    lstm2 = LSTM(64 ,return_sequences=True, input_shape=(settings.stepSize,128),dropout_W=0.5, dropout_U=0.5)(cls5_fc2)
+
+    #lstm2 = LSTM(64 ,return_sequences=True, input_shape=(settings.stepSize,128),dropout_W=0.5, dropout_U=0.5)(cls5_fc2)
     
    # lstm1 = LSTM(128 ,return_sequences=True, input_shape=(settings.stepSize,512))(lstm)
 
@@ -270,7 +271,7 @@ def create_cnn_lstm(weights_path=None):
 
     pose_xyz = TimeDistributed(Dense(3,name='pose_xyz',W_regularizer=l2(0.0002)))(lstm1)
 
-    pose_wpqr = TimeDistributed(Dense(4,name='pose_wpqr',W_regularizer=l2(0.0002)))(lstm2)
+    pose_wpqr = TimeDistributed(Dense(4,name='pose_wpqr',W_regularizer=l2(0.0002)))(lstm1)
 
     cnn_lstm = Model(input=input, output=[pose_xyz,pose_wpqr])
     
