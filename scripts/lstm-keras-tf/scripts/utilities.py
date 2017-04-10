@@ -196,6 +196,42 @@ def gen_data(source):
             #, pose_x_right,pose_q_right
 
 
+
+def get_data_examples(source):
+    #while True:
+        indices = range(len(source[0]))
+        random.shuffle(indices)
+        for i in indices:
+            image = source[0][i]
+            image_left = source[0][max(0, i - 1)]
+            image_right = source[0][min(i + 1, len(source[0]) - 1)]
+            pose_x = source[1][0][i]
+            pose_q = source[1][1][i]
+            pose_x_left = source[1][0][max(0, i - 1)]
+            pose_q_left = source[1][1][max(0, i - 1)]
+            pose_x_right = source[1][0][min(i + 1, len(source[0]) - 1)]
+            pose_q_right = source[1][1][min(i + 1, len(source[0]) - 1)]
+       # print type(pose_x)
+       # print pose_x
+            # print pose_q
+            # print pose_x_left
+            m1_2, a1_2 = getError(pose_x, pose_q, pose_x_left, pose_q_left)
+            m2_3, a2_3 = getError(pose_x, pose_q, pose_x_right, pose_q_right)
+            m1_3, a1_3 = getError(pose_x_left, pose_q_left,
+                                  pose_x_right, pose_q_right)
+
+            if m1_2 > settings.distanceThreshold or m2_3 > settings.distanceThreshold:
+                continue
+            if a1_2 > settings.angleThreshold or a2_3 > settings.angleThreshold:
+                continue
+            #global samplesCounter
+            # samplesCounter+=1
+            # print samplesCounter
+            yield np.asarray([image_left, image, image_right]), np.asarray([pose_x, pose_x_left, pose_x_right]), np.asarray([pose_q, pose_q_left, pose_q_right])
+
+
+
+
 def gen_data_batch(source):
     data_gen = gen_data(source)
     while True:

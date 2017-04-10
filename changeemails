@@ -1,0 +1,11 @@
+git filter-branch --commit-filter '
+        if [ "$GIT_AUTHOR_NAME" = "winter semester acc#42" ];
+        then
+		
+                GIT_AUTHOR_NAME="chenyz0601";
+                GIT_AUTHOR_EMAIL="chenyz61@hotmail.com";
+                git commit-tree "$@";
+        else
+                git commit-tree "$@";
+        fi' HEAD
+

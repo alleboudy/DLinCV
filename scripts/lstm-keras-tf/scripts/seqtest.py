@@ -1,5 +1,5 @@
 import numpy as np
-import cnn_lstm_NEW as cnn_lstm
+import old_cnn_lstm as cnn_lstm
 from scipy.misc import imread, imresize
 from keras.layers import Input, Dense, Convolution2D, MaxPooling2D, AveragePooling2D, ZeroPadding2D, Dropout, Flatten, merge, Reshape, Activation
 from keras.models import Model
@@ -20,6 +20,10 @@ settings.saveMean=False
 #meanFileLocation = 'smmean.binaryproto'
 # 'tfsmtrainedweights.h5'#'75batbhessmtrainedweights.h5'#'smtrainedweights.h5'
 weightsfile = settings.testweights
+
+
+
+
 # weightsfile='shoptrainedweights.h5'
 #poses = []  # will contain poses followed by qs
 #images = []
