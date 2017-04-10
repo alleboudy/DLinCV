@@ -10,7 +10,7 @@ from keras import backend as K
 import time
 import settings
 from keras.callbacks import ModelCheckpoint
-
+import datetime
 outputWeightspath =settings.outputWeightspath #'oldhospitaltrainedweights.h5'
 BETA = settings.BETA #to 2000 for outdoor
 ALPHA=settings.ALPHA
@@ -18,9 +18,9 @@ directory = settings.directory#"/usr/prakt/w065/posenet/OldHospital/"
 settings.saveMean=True
 #dataset = 'dataset_train.txt'
 #historyloglocation = '{}traininghistory_{}.txt'.format(directory,str(time.time()))
-historyloglocation = '{}{}traininghistory_{}.csv'.format(directory,settings.logprefix,str(time.time()))
+historyloglocation =settings.historyloglocation #'{}{}traininghistory_{}.csv'.format(directory,settings.logprefix,datetime.datetime.now().strftime("%I-%M%p_%B-%d-%Y"))
 with open(historyloglocation,"a+") as f:
-	f.write('{},{}\n'.format('itr', 'loss'))
+	f.write('validationSplit:{}\ncorrespondingWeights:{}\nbatchSize:{}\nBeta:{}\nmeanOfMeansImage:{}\nstartingweights:{}\n'.format(str(settings.validationSplit), str(outputWeightspath),str(settings.batchSize),str(settings.BETA),str(settings.oldmean),settings.startweight))
 #Validationhistoryloglocation = '{}validationhistory_{}.txt'.format(directory,str(time.time()))
 #startweight = 'oldhospitaltrainedweights.h5' 
 startweight= settings.startweight #'../mergedweights.h5'
@@ -48,6 +48,7 @@ class LossHistory(keras.callbacks.Callback):
 	def on_train_begin(self, logs={}):
 		with open(historyloglocation,"a+") as f:
 			f.write('{},{}\n'.format('val_loss', 'loss'))
+			
 
 	def on_batch_end(self, batch, logs={}):
 		#print (self.params)
@@ -79,6 +80,10 @@ for X,Y,Z in utilities.get_data_examples(datasource):
 	allX.append(X)
 	allY.append(Y)
 	allZ.append(Z)
+
+with open(historyloglocation,"a+") as f:
+     f.write('total number of samples:{}\n'.format(len(allY)))
+
 
 YZ.append(np.asarray(allY))
 YZ.append(np.asarray(allZ))
