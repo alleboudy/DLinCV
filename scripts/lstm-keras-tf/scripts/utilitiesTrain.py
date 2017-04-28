@@ -38,21 +38,21 @@ def ResizeCropImage(image):
 # extracts the mean image form a given mean file
 
 def ResizeDifferentCrops(image):
-	quarterHeight = int(image.shape[0]/2)
-	quarterWidth = int(image.shape[1]/2)
-	cornerImg1 =ResizeCropImage( image[:quarterHeight, :quarterWidth])
-	cornerImg2 = ResizeCropImage(image[image.shape[0]-quarterHeight:, :quarterWidth])
-	cornerImg3 = ResizeCropImage(image[image.shape[0]-quarterHeight:, image.shape[1]-quarterWidth:])
-	cornerImg4 = ResizeCropImage(image[:quarterHeight, image.shape[1]-quarterWidth:])
-	centerImg = ResizeCropImage(image[quarterHeight - int(quarterHeight/2):quarterHeight + int(quarterHeight/2), quarterWidth - int(quarterWidth/2):quarterWidth + int(quarterWidth/2)])
-	wholeImg = ResizeCropImage(image)
-	# cv2.imshow("lol1",cornerImg1)
-	# cv2.imshow("lol2",cornerImg2)
-	# cv2.imshow("lol3",cornerImg3)
-	# cv2.imshow("lol4",cornerImg4)
-	# cv2.imshow("lolcenter",centerImg)
-	# cv2.waitKey()
-	return (cornerImg1.astype(np.float32),cornerImg2.astype(np.float32),cornerImg3.astype(np.float32),cornerImg4.astype(np.float32),centerImg.astype(np.float32),wholeImg.astype(np.float32))
+    quarterHeight = int(image.shape[0]/2)
+    quarterWidth = int(image.shape[1]/2)
+    cornerImg1 =ResizeCropImage( image[:quarterHeight, :quarterWidth])
+    cornerImg2 = ResizeCropImage(image[image.shape[0]-quarterHeight:, :quarterWidth])
+    cornerImg3 = ResizeCropImage(image[image.shape[0]-quarterHeight:, image.shape[1]-quarterWidth:])
+    cornerImg4 = ResizeCropImage(image[:quarterHeight, image.shape[1]-quarterWidth:])
+    centerImg = ResizeCropImage(image[quarterHeight - int(quarterHeight/2):quarterHeight + int(quarterHeight/2), quarterWidth - int(quarterWidth/2):quarterWidth + int(quarterWidth/2)])
+    wholeImg = ResizeCropImage(image)
+    # cv2.imshow("lol1",cornerImg1)
+    # cv2.imshow("lol2",cornerImg2)
+    # cv2.imshow("lol3",cornerImg3)
+    # cv2.imshow("lol4",cornerImg4)
+    # cv2.imshow("lolcenter",centerImg)
+    # cv2.waitKey()
+    return (cornerImg1.astype(np.float32),cornerImg2.astype(np.float32),cornerImg3.astype(np.float32),cornerImg4.astype(np.float32),centerImg.astype(np.float32),wholeImg.astype(np.float32))
 
 #def getMean():
     #blob = caffe.proto.caffe_pb2.BlobProto()
@@ -61,7 +61,6 @@ def ResizeDifferentCrops(image):
     #arr = np.array( caffe.io.blobproto_to_array(blob) )
 #    return np.load(meanFile)
     # return #arr[0]
-
 
 
 
@@ -100,6 +99,8 @@ def subtract_mean(images,saveMean=False):
       ready_images.append(img)
 
     return ready_images
+
+
 
 
 def get_data(dataset=data):
@@ -153,15 +154,18 @@ def get_data(dataset=data):
             po2.append(
                 np.array((np.float(p3), np.float(p4), np.float(p5), np.float(p6))))
 
-    ready_imgs1 = subtract_mean(np.asarray(images_batch1))
-    ready_imgs2 = subtract_mean(np.asarray(images_batch2))
-    ready_imgs3 = subtract_mean(np.asarray(images_batch3))
-    ready_imgs4 = subtract_mean(np.asarray(images_batch4))
-    ready_imgsCenter = subtract_mean(np.asarray(images_batchCenter))
+    ready_imgs1 = subtract_mean(np.asarray(images_batch1),True)
+    ready_imgs2 = subtract_mean(np.asarray(images_batch2),True)
+    ready_imgs3 = subtract_mean(np.asarray(images_batch3),True)
+    ready_imgs4 = subtract_mean(np.asarray(images_batch4),True)
+    ready_imgsCenter = subtract_mean(np.asarray(images_batchCenter),True)
     ready_imgsWhole = subtract_mean(np.asarray(images_batchWhole),True)
-#		print po1.shape,p2.shape
-    ready_imgs = [ready_imgs1+ready_imgs2+ready_imgs3+ready_imgs4+ready_imgsCenter+ready_imgsWhole]
-    return (ready_imgs, [np.asarray((po1+po1+po1+po1+po1+po1)), np.asarray((po2+po2+po2+po2+po2+po2))])
+#       print po1.shape,p2.shape
+    print "type is ########"
+    print type(ready_imgs1)
+    ready_imgs = ready_imgs1+ready_imgs2+ready_imgs3+ready_imgs4+ready_imgsCenter+ready_imgsWhole
+    print type(ready_imgs)
+    return (np.asarray(ready_imgs), [np.asarray((po1+po1+po1+po1+po1+po1)), np.asarray((po2+po2+po2+po2+po2+po2))])
 
 
 
@@ -215,4 +219,5 @@ def gen_data_batch(source):
             pose_x_batch.append(pose_x)
             pose_q_batch.append(pose_q)
         yield np.asarray(image_batch), [np.asarray(pose_x_batch), np.asarray(pose_q_batch)]
+
 
