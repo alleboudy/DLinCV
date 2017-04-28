@@ -1,4 +1,4 @@
-import utilities
+import utilitiesTrain as utilities
 #import posenet
 import old_cnn_lstm as cnn_lstm
 import theano
