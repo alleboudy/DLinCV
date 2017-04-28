@@ -87,8 +87,9 @@ with open(historyloglocation,"a+") as f:
 
 YZ.append(np.asarray(allY))
 YZ.append(np.asarray(allZ))
-
 checkpointer = ModelCheckpoint(filepath=outputWeightspath, verbose=1, save_best_only=True,monitor='val_loss')
+if settings.validationSplit==0:
+	checkpointer = ModelCheckpoint(filepath=outputWeightspath, verbose=1, save_best_only=True,monitor='loss')
 history = LossHistory()
 model.fit(np.asarray(allX),YZ,
 	  epochs=nb_epochs,batch_size=settings.batchSize,validation_split=settings.validationSplit,callbacks=[history,checkpointer])

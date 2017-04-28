@@ -37,6 +37,22 @@ def ResizeCropImage(image):
 
 # extracts the mean image form a given mean file
 
+def ResizeDifferentCrops(image):
+	quarterHeight = int(image.shape[0]/2)
+	quarterWidth = int(image.shape[1]/2)
+	cornerImg1 =ResizeCropImage( image[:quarterHeight, :quarterWidth])
+	cornerImg2 = ResizeCropImage(image[image.shape[0]-quarterHeight:, :quarterWidth])
+	cornerImg3 = ResizeCropImage(image[image.shape[0]-quarterHeight:, image.shape[1]-quarterWidth:])
+	cornerImg4 = ResizeCropImage(image[:quarterHeight, image.shape[1]-quarterWidth:])
+	centerImg = ResizeCropImage(image[quarterHeight - int(quarterHeight/2):quarterHeight + int(quarterHeight/2), quarterWidth - int(quarterWidth/2):quarterWidth + int(quarterWidth/2)])
+	wholeImg = ResizeCropImage(image)
+	# cv2.imshow("lol1",cornerImg1)
+	# cv2.imshow("lol2",cornerImg2)
+	# cv2.imshow("lol3",cornerImg3)
+	# cv2.imshow("lol4",cornerImg4)
+	# cv2.imshow("lolcenter",centerImg)
+	# cv2.waitKey()
+	return (cornerImg1,cornerImg2,cornerImg3,cornerImg4,centerImg,wholeImg)
 
 #def getMean():
     #blob = caffe.proto.caffe_pb2.BlobProto()
@@ -200,7 +216,8 @@ def gen_data(source):
 def get_data_examples(source):
     #while True:
         indices = range(len(source[0]))
-        random.shuffle(indices)
+	if settings.shuffle:
+        	random.shuffle(indices)
         for i in indices:
             image = source[0][i]
             image_left = source[0][max(0, i - 1)]
