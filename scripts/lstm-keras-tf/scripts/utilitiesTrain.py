@@ -13,7 +13,7 @@ batchSize = settings.batchSize
 # resizes a given image so that the smallest dimension is 256 then crops
 # 244X244 from the middle of it
 # samplesCounter=0
-
+fnames=[]
 
 def ResizeCropImage(image):
     # we need to keep in mind aspect ratio so the image does
@@ -133,6 +133,7 @@ def get_data(dataset=data):
             fname, p0, p1, p2, p3, p4, p5, p6 = line.split()
             img1,img2,img3,img4,imgCenter,imgWhole = ResizeDifferentCrops(cv2.imread(
                 directory + fname))#.astype(np.float32)
+	    fnames.append(fname.split('/')[0])
             img1 = img1.transpose((2, 0, 1))
             img2 = img2.transpose((2, 0, 1))
             img3 = img3.transpose((2, 0, 1))
@@ -162,9 +163,11 @@ def get_data(dataset=data):
     ready_imgsWhole = subtract_mean(np.asarray(images_batchWhole),True)
 #       print po1.shape,p2.shape
     print "type is ########"
-    print type(ready_imgs1)
+    print len(ready_imgs1)
     ready_imgs = ready_imgs1+ready_imgs2+ready_imgs3+ready_imgs4+ready_imgsCenter+ready_imgsWhole
-    print type(ready_imgs)
+    print len(ready_imgs)
+    print type(po1)
+    
     return (np.asarray(ready_imgs), [np.asarray((po1+po1+po1+po1+po1+po1)), np.asarray((po2+po2+po2+po2+po2+po2))])
 
 
@@ -173,9 +176,9 @@ def get_data(dataset=data):
 def get_data_examples(source):
     #while True:
     indices = range(len(source[0]))
-    if settings.shuffle:
-        random.shuffle(indices)
-        for i in indices:
+    #if settings.shuffle:
+     #   random.shuffle(indices)
+    for i in indices:
             image = source[0][i]
             image_left = source[0][max(0, i - 1)]
             image_right = source[0][min(i + 1, len(source[0]) - 1)]
@@ -193,7 +196,9 @@ def get_data_examples(source):
             m2_3, a2_3 = getError(pose_x, pose_q, pose_x_right, pose_q_right)
             m1_3, a1_3 = getError(pose_x_left, pose_q_left,
                                   pose_x_right, pose_q_right)
-
+	    if fnames[i%len(fnames)]!=fnames[(i+1)%len(fnames)] or fnames[i%len(fnames)]!=fnames[(i-1)%len(fnames)]:
+		print("skiped: "+ fnames[(i-1)%len(fnames)]+"_"+fnames[i%len(fnames)])+"_"+fnames[(i+1)%len(fnames)]
+		continue
             if m1_2 > settings.distanceThreshold or m2_3 > settings.distanceThreshold:
                 continue
             if a1_2 > settings.angleThreshold or a2_3 > settings.angleThreshold:
