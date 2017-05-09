@@ -121,9 +121,9 @@ def get_data(dataset=data):
     print dataset
     with open(dataset) as f:
         print 'preparing data'
-        next(f)  # skip the 3 header lines
-        next(f)
-        next(f)
+        #next(f)  # skip the 3 header lines
+        #next(f)
+        #next(f)
    # while(True):
         # print 'lol3'
 
