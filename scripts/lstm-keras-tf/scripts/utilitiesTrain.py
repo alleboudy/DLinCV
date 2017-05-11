@@ -38,8 +38,8 @@ def ResizeCropImage(image):
 # extracts the mean image form a given mean file
 
 def ResizeDifferentCrops(image):
-    quarterHeight = int(image.shape[0]/2)
-    quarterWidth = int(image.shape[1]/2)
+    quarterHeight = int(image.shape[0]*0.75)
+    quarterWidth = int(image.shape[1]*0.75)
     cornerImg1 =ResizeCropImage( image[:quarterHeight, :quarterWidth])
     cornerImg2 = ResizeCropImage(image[image.shape[0]-quarterHeight:, :quarterWidth])
     cornerImg3 = ResizeCropImage(image[image.shape[0]-quarterHeight:, image.shape[1]-quarterWidth:])
@@ -167,8 +167,13 @@ def get_data(dataset=data):
     ready_imgs = ready_imgs1+ready_imgs2+ready_imgs3+ready_imgs4+ready_imgsCenter+ready_imgsWhole
     print len(ready_imgs)
     print type(po1)
-    
-    return (np.asarray(ready_imgs), [np.asarray((po1+po1+po1+po1+po1+po1)), np.asarray((po2+po2+po2+po2+po2+po2))])
+    ready_imgs_lst = ready_imgs+[x for x in reversed(ready_imgs)]
+    poses = po1+po1+po1+po1+po1+po1
+    allposes=poses+[x for x in reversed(poses)]
+    orts = po2+po2+po2+po2+po2+po2
+    allorts = orts+[x for x in reversed(orts)]
+
+    return (np.asarray(ready_imgs_lst), [np.asarray(allposes), np.asarray(allorts)])
 
 
 
