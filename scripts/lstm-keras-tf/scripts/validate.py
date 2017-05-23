@@ -18,8 +18,8 @@ datagen = utilities.limited_gen_data(datasource)
 settings.saveMean=False
 #weightsfile = settings.testweights
 
-def validate(weightsfile):
-	model = cnn_lstm.create_cnn_lstm(weightsfile)
+def validate(model):
+	#model = cnn_lstm.create_cnn_lstm(weightsfile)
 	sgd = SGD(lr=0.1, decay=1e-6, momentum=0.9, nesterov=True)
 	model.compile(optimizer=sgd, loss='categorical_crossentropy')
 	posxs = []

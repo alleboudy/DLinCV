@@ -11,6 +11,7 @@ import time
 import settings
 from keras.callbacks import ModelCheckpoint
 import datetime
+from validate import validate
 outputWeightspath =settings.outputWeightspath #'oldhospitaltrainedweights.h5'
 BETA = settings.BETA #to 2000 for outdoor
 ALPHA=settings.ALPHA
@@ -42,6 +43,8 @@ def rotation_loss3(y_true, y_pred):
         print "####### IN THE ROTATION LOSS FUNCTION #####"
         return  BETA *K.sqrt(K.sum(K.square((y_true-y_pred))))
 
+print "creating the model"
+model =cnn_lstm.create_cnn_lstm(startweight)
 
 
 class LossHistory(keras.callbacks.Callback):
@@ -55,12 +58,13 @@ class LossHistory(keras.callbacks.Callback):
 		pass
 
 	def on_epoch_end(self, epoch, logs={}):
+		valTr,valRo,_ = validate(model) 
 		with open(historyloglocation,"a+") as f:
-			f.write('{},{}\n'.format(logs.get('val_loss'), logs.get('loss')))
+			f.write('{},{},{},{}\n'.format(logs.get('val_loss'), logs.get('loss'),valTr,valRo))
 #batchSize=25
 nb_epochs = settings.nb_epochs
-print "creating the model"
-model =cnn_lstm.create_cnn_lstm(startweight)
+#print "creating the model"
+#model =cnn_lstm.create_cnn_lstm(startweight)
 sgd = settings.optimizer
 #sgd = SGD(lr=0.000001, decay=1e-6, momentum=0.9, nesterov=True)
 model.compile(optimizer=sgd, loss=[pose_loss3,rotation_loss3])
