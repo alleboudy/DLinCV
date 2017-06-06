@@ -58,7 +58,9 @@ class LossHistory(keras.callbacks.Callback):
 		pass
 
 	def on_epoch_end(self, epoch, logs={}):
-		valTr,valRo,_ = validate(model) 
+		print('logging!')
+		print(type(self.model))
+		valTr,valRo,_ = validate(self.model) 
 		with open(historyloglocation,"a+") as f:
 			f.write('{},{},{},{}\n'.format(logs.get('val_loss'), logs.get('loss'),valTr,valRo))
 #batchSize=25
