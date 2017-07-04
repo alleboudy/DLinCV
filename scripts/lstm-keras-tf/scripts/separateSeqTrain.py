@@ -88,7 +88,8 @@ allZ=[]
 YZ=[]
 seqfiles = [f for f in listdir(settings.traindata) if isfile(join(settings.traindata, f))]
 for seqFile in seqfiles:
-	datasource = utilities.get_data(settings.traindata)
+	print(seqFile)
+	datasource = utilities.get_data(join(settings.traindata,seqFile))
 	for X,Y,Z in utilities.get_data_examples(datasource):
 		allX.append(X)
 		allY.append(Y)

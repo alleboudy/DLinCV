@@ -132,7 +132,7 @@ def get_data(dataset=data):
                 continue
 	    #if settings.seqPrefix !='' and not line.startswith(settings.seqPrefix):
 		#continue
-	    print(line)
+	    #print(line)
             fname, p0, p1, p2, p3, p4, p5, p6 = line.split()
             img1,img2,img3,img4,imgCenter,imgWhole = ResizeDifferentCrops(cv2.imread(
                 directory + fname))#.astype(np.float32)
