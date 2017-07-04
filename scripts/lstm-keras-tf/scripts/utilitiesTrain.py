@@ -130,8 +130,8 @@ def get_data(dataset=data):
         for line in f:
             if line.isspace():
                 continue
-	    if settings.seqPrefix !='' and not line.startswith(settings.seqPrefix):
-		continue
+	    #if settings.seqPrefix !='' and not line.startswith(settings.seqPrefix):
+		#continue
 	    print(line)
             fname, p0, p1, p2, p3, p4, p5, p6 = line.split()
             img1,img2,img3,img4,imgCenter,imgWhole = ResizeDifferentCrops(cv2.imread(
