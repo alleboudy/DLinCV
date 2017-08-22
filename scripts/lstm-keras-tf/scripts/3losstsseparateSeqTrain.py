@@ -124,7 +124,7 @@ checkpointer = ModelCheckpoint(filepath=outputWeightspath, verbose=1, save_best_
 if settings.validationSplit==0:
 	checkpointer = ModelCheckpoint(filepath=outputWeightspath, verbose=1, save_best_only=True,monitor='loss')
 history = LossHistory()
-model.fit(np.asarray(allX),{'time_distributed_35': allZ, 'time_distributed_34': allY,'time_distributed_62': allZ, 'time_distributed_61':allY,'time_distributed_90': allZ, 'time_distributed_89': allY},
+model.fit(np.asarray(allX),{'cls1_fc_pose_wpqr': allZ, 'cls1_fc_pose_xyz': allY,'cls2_fc_pose_wpqr': allZ, 'cls2_fc_pose_xyz':allY,'pose_wpqr': allZ, 'pose_xyz': allY},
 	  epochs=nb_epochs,batch_size=settings.batchSize,validation_split=settings.validationSplit,callbacks=[history,checkpointer])
 
 #for i in range(nb_epochs):
