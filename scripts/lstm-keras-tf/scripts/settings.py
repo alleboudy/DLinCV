@@ -2,18 +2,19 @@ import keras
 import tensorflow as tf
 import datetime
 ALPHA=1
-BETA=1000
-pre='gc'
+BETA=500
+pre='kc'
 shuffle=False
 saveMean=False
-seqPrefix='seq2' # set to empty, should use all sequences present in a dataset for training
+#seqPrefix='seq2' # set to empty, should use all sequences present in a dataset for training
 solDir='/usr/stud/alleboud/vision/'#'/work/alleboud/vision/'
 datestring=datetime.datetime.now().strftime("%I-%M%p_%B-%d-%Y")
 outputWeightspath  = solDir+'trainedweights/'+datestring+'_'+pre+'_LSTM.h5'#'KC_LSTM.h5'
 oldmean=False#mean image = mean of means
 testweights = solDir+'trainedweights/12-27PM_May-21-2017_'+pre+'_LSTM.h5'
 directory=solDir+pre+'/'
-startweight=solDir+'trainedweights/weights/mergedweights.h5'
+startweight=solDir+'trainedweights/weights/posenet.npy'#mergedweights.h5'
+#10-47AM_July-10-2017_sm_LSTM.h5'
 #'../../mergedweights.h5'
 #'/usr/prakt/w065/trainedweights/28_3_'+pre+'_LSTM.h5'#'/usr/prakt/w065/trainedweights/mergedweights.h5'#'../../mergedweights.h5'
 #'lstmtfsmtrainedweights.h5'
