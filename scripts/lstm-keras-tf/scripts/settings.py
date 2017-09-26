@@ -2,8 +2,8 @@ import keras
 import tensorflow as tf
 import datetime
 ALPHA=1
-BETA=500
-pre='kc'
+BETA=1000
+pre='heads'
 shuffle=False
 saveMean=False
 #seqPrefix='seq2' # set to empty, should use all sequences present in a dataset for training
@@ -21,7 +21,7 @@ startweight=solDir+'trainedweights/weights/posenet.npy'#mergedweights.h5'
 #'batch30lstmtfsmtrainedweights.h5'#'../../mergedweights.h5'#'posenet.npy'
 nb_epochs=100000
 meanFile ='../meanFiles/npy/'+pre+'.npy'
-batchSize=40
+batchSize=75
 logprefix='LSTM_'+pre
 stepSize = 3
 traindata = solDir+'DLinCV/scripts/lstm-keras-tf/splittedOrderedSets/'+pre#+'orderedset_train.txt'
